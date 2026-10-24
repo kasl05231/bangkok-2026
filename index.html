@@ -7,363 +7,488 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;600;800&family=Varela+Round&display=swap">
 <style>
-/* Layout: notebook page, sticky day tabs, schematic route map on top of a vertical timeline */
+/* Layout: cute notebook. Single warm-paper look on purpose (like a printed travel diary).
+   Tab strip -> day header card -> illustrated map with time player -> timeline -> notes */
 :root{
-  --bg:#eef4ef; --paper:#fbfdfb; --ink:#1b2a23; --muted:#5d6f66; --line:#d3e0d7;
-  --green:#1d7a4b; --gold:#c98408; --orchid:#b23f74; --sky:#2c6fae; --grey:#6b7a73;
-  --gold-soft:#fbefd6; --orchid-soft:#f8e3ec; --green-soft:#dff0e5; --sky-soft:#e1ecf7;
-  --f-disp:"LXGW WenKai TC","Kaiti TC","STKaiti",serif;
-  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
-  --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+  --bg:#fff4e2; --paper:#fffdf7; --ink:#4a3a33; --muted:#8a776c; --line:#e9d9c4;
+  --yellow:#ffd96a; --yellow-soft:#fff1c4; --pink:#ff9db4; --pink-soft:#ffe3ea;
+  --mint:#9fdcc0; --mint-soft:#e1f5ec; --sky:#9fd2f2; --sky-soft:#e3f2fb; --river:#bfe3f7;
+  --land:#fdeccf; --park:#cfeec0; --red:#f2676b;
+  --f-cute:"Chiron GoRound TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-num:"Varela Round","Chiron GoRound TC",ui-rounded,system-ui,sans-serif;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0f1714; --paper:#16211c; --ink:#e4eee8; --muted:#97aa9f; --line:#2a3a32;
-  --green:#5cc48a; --gold:#f0b440; --orchid:#e57aa8; --sky:#79b2e8; --grey:#9aa9a1;
-  --gold-soft:#3a2d12; --orchid-soft:#3a1d2a; --green-soft:#17352a; --sky-soft:#162c40; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0f1714; --paper:#16211c; --ink:#e4eee8; --muted:#97aa9f; --line:#2a3a32;
-  --green:#5cc48a; --gold:#f0b440; --orchid:#e57aa8; --sky:#79b2e8; --grey:#9aa9a1;
-  --gold-soft:#3a2d12; --orchid-soft:#3a1d2a; --green-soft:#17352a; --sky-soft:#162c40; color-scheme:dark}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.6}
-.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
-header h1{font-family:var(--f-disp);font-size:2rem;margin:0;line-height:1.2;text-wrap:balance}
-header .sub{color:var(--muted);margin-top:4px}
-.clocks{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-.clock{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-width:0}
-.clock small{display:block;color:var(--muted);font-size:.72rem;letter-spacing:.06em}
-.clock b{font-family:var(--f-num);font-size:1.25rem;font-variant-numeric:tabular-nums}
-.clock.th b{color:var(--green)}
-.tools{display:flex;gap:8px;margin-left:auto;align-items:center}
-button{font:inherit;cursor:pointer}
-.btn{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.85rem}
-.btn:focus-visible,.tab:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding-block:12px;margin-top:16px}
-.tab{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:6px 2px;color:var(--ink);text-align:center;line-height:1.25}
-.tab b{display:block;font-family:var(--f-num);font-size:.95rem}
-.tab span{font-size:.72rem;color:var(--muted)}
-.tab[aria-selected="true"]{background:var(--green);border-color:var(--green);color:var(--paper)}
-.tab[aria-selected="true"] span{color:var(--paper)}
-.daytitle{font-family:var(--f-disp);font-size:1.5rem;margin:8px 0 2px}
-.daysum{color:var(--muted);margin:0 0 12px}
-.map{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px}
-.map svg{display:block;width:100%;height:auto}
-.maphead{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted);flex-wrap:wrap}
-.maphead .btn{padding:3px 10px}
-.timeline{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:0}
-.item{display:grid;grid-template-columns:62px 1fr;gap:12px;padding:10px 0;border-top:1px dashed var(--line)}
-.item:first-child{border-top:0}
-.t{font-family:var(--f-num);font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:2px}
-.body{min-width:0}
-.ttl{font-weight:700;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.note{color:var(--muted);font-size:.88rem;margin-top:2px}
-.chip{font-size:.7rem;padding:1px 7px;border-radius:999px;font-weight:500;white-space:nowrap}
-.k-fly{background:var(--sky-soft);color:var(--sky)}
-.k-eat{background:var(--gold-soft);color:var(--gold)}
-.k-spa{background:var(--orchid-soft);color:var(--orchid)}
-.k-see{background:var(--green-soft);color:var(--green)}
-.k-go{background:var(--line);color:var(--grey)}
-.s-ok{border:1px solid var(--green);color:var(--green)}
-.s-tbd{border:1px solid var(--gold);color:var(--gold)}
-.s-alt{border:1px dashed var(--grey);color:var(--grey)}
-.maplink{font-size:.8rem;color:var(--sky);text-decoration:none;white-space:nowrap}
-.maplink:hover{text-decoration:underline}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:16px}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
-.card h3{margin:0 0 4px;font-size:.78rem;letter-spacing:.08em;color:var(--muted);font-weight:500}
-.card p{margin:0;font-size:.9rem}
-.card.tbd{border-color:var(--gold)}
-section.block{margin-top:32px}
-section.block h2{font-family:var(--f-disp);font-size:1.3rem;margin:0 0 10px}
-.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
-.check label{display:flex;gap:10px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 10px;cursor:pointer}
-.check input{margin-top:5px;accent-color:var(--green);flex:none}
-.check input:checked + span{color:var(--muted);text-decoration:line-through}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-cute);line-height:1.6;
+  background-image:radial-gradient(var(--line) 1.2px,transparent 1.3px);background-size:18px 18px}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:16px 48px;display:grid;gap:14px}
+.box{background:var(--paper);border:2.5px solid var(--ink);border-radius:22px;box-shadow:0 4px 0 var(--line)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+
+/* header */
+header{text-align:center;padding-top:4px}
+header h1{margin:0;font-size:1.7rem;font-weight:800;letter-spacing:.04em;text-wrap:balance}
+header h1 span{background:linear-gradient(transparent 60%,var(--yellow) 60%);padding:0 4px}
+.sub{color:var(--muted);font-size:.85rem;margin-top:2px}
+.clocks{display:flex;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:3px 12px;font-size:.8rem}
+.pill b{font-family:var(--f-num);font-size:1rem;font-variant-numeric:tabular-nums}
+.pill.th{background:var(--mint-soft)}
+.pill.cd{background:var(--yellow-soft)}
+
+/* tab strip */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;min-width:96px;background:var(--paper);border:2.5px solid var(--ink);border-radius:16px;padding:6px 10px;text-align:left;line-height:1.3;box-shadow:0 3px 0 var(--line)}
+.tab .ic{font-size:1.1rem}
+.tab b{display:block;font-size:.88rem}
+.tab small{color:var(--muted);font-size:.7rem}
+.tab[aria-selected="true"]{background:var(--yellow);box-shadow:0 3px 0 var(--ink)}
+
+/* day header */
+.dayhead{padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.dayhead .face{flex:none;width:46px;height:46px}
+.dayhead h2{margin:0;font-size:1.2rem;font-weight:800;line-height:1.35;text-wrap:balance}
+.dayhead p{margin:4px 0 0;color:var(--muted);font-size:.85rem}
+.tagline{display:inline-block;margin-top:8px;border:2px dashed var(--ink);background:var(--yellow-soft);border-radius:12px;padding:2px 10px;font-size:.8rem;font-weight:600}
+
+/* map + player */
+.mapbox{overflow:hidden}
+.mapbox svg{display:block;width:100%;height:auto;background:var(--land)}
+.player{padding:12px 14px 14px;border-top:2.5px dashed var(--line)}
+.now{display:flex;align-items:center;gap:10px;min-width:0}
+.now .clk{font-family:var(--f-num);font-size:1.7rem;font-variant-numeric:tabular-nums;line-height:1}
+.now .clk small{display:block;font-family:var(--f-cute);font-size:.62rem;color:var(--muted);margin-top:2px}
+.now .what{min-width:0;font-weight:600;font-size:.92rem}
+.now .what small{display:block;color:var(--muted);font-weight:400;font-size:.75rem}
+.nextstop{margin-top:8px;background:var(--mint-soft);border:2px dashed var(--ink);border-radius:12px;padding:3px 10px;font-size:.82rem}
+.nextstop b{font-family:var(--f-num)}
+.ctrl{display:flex;align-items:center;gap:10px;margin-top:10px}
+.round{width:44px;height:44px;border-radius:50%;border:2.5px solid var(--ink);background:var(--red);color:#fff;font-size:1rem;flex:none;box-shadow:0 3px 0 var(--line)}
+.chipbtn{border:2.5px solid var(--ink);background:var(--yellow-soft);border-radius:999px;padding:3px 10px;font-size:.8rem;font-weight:600;flex:none}
+.chipbtn.live[aria-pressed="true"]{background:var(--mint)}
+input[type=range]{flex:1;min-width:0;accent-color:var(--red)}
+.crew{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.8rem;color:var(--muted)}
+.mate{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:2px 10px 2px 3px;background:var(--paper);font-size:.8rem;color:var(--ink);font-weight:600}
+.mate img{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--pink-soft)}
+.mate[aria-pressed="false"]{opacity:.4}
+.mapnote{margin:10px 0 0;font-size:.72rem;color:var(--muted)}
+
+/* timeline */
+.tl{padding:8px 14px}
+.tl ol{list-style:none;margin:0;padding:0}
+.it{display:grid;grid-template-columns:54px 1fr;gap:10px;padding:9px 6px;border-bottom:2px dotted var(--line);border-radius:12px}
+.it:last-child{border-bottom:0}
+.it.cur{background:var(--yellow-soft)}
+.it .t{font-family:var(--f-num);font-size:.85rem;font-variant-numeric:tabular-nums;padding-top:1px}
+.it .t small{display:block;font-family:var(--f-cute);font-size:.62rem;color:var(--muted)}
+.it .b{min-width:0}
+.it .ttl{font-weight:600;font-size:.93rem}
+.it .note{color:var(--muted);font-size:.8rem}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px;align-items:center}
+.tg{font-size:.68rem;border:1.5px solid var(--ink);border-radius:999px;padding:0 7px;background:var(--paper)}
+.tg.ok{background:var(--mint)}
+.tg.tbd{background:var(--yellow)}
+.tg.k-eat{background:var(--yellow-soft)}
+.tg.k-spa{background:var(--pink-soft)}
+.tg.k-see{background:var(--mint-soft)}
+.tg.k-fly,.tg.k-go{background:var(--sky-soft)}
+.gm{font-size:.72rem;color:var(--ink);text-decoration:none;border-bottom:1.5px dashed var(--ink)}
+
+/* notes */
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.note-card{padding:10px 12px;border-radius:18px;min-width:0}
+.note-card h3{margin:0 0 3px;font-size:.8rem}
+.note-card p{margin:0;font-size:.85rem}
+.note-card.tbd{background:var(--yellow-soft)}
+.sec{padding:14px 16px}
+.sec h2{margin:0 0 10px;font-size:1.05rem;font-weight:800}
 .tips{display:grid;gap:8px}
-.tip{background:var(--paper);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:8px 12px;font-size:.92rem}
+.tip{background:var(--pink-soft);border-radius:14px;padding:8px 12px;font-size:.86rem}
 .tip b{display:block}
-.tip a{color:var(--sky)}
-.count{display:inline-block;margin-top:10px;background:var(--gold-soft);color:var(--gold);border-radius:999px;padding:3px 12px;font-size:.85rem;font-weight:500}
-footer{margin-top:28px;color:var(--muted);font-size:.8rem}
-@media (max-width:420px){header h1{font-size:1.6rem}.item{grid-template-columns:52px 1fr;gap:8px}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.tip a{color:var(--ink)}
+.todo{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.todo label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:.88rem;padding:4px 2px}
+.todo input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--red)}
+.todo input:checked+span{text-decoration:line-through;color:var(--muted)}
+.days{display:grid;gap:8px}
+.dcard{display:flex;gap:10px;align-items:center;text-align:left;background:var(--paper);border:2px solid var(--ink);border-radius:16px;padding:8px 12px}
+.dcard .dt{font-family:var(--f-num);background:var(--yellow);border:2px solid var(--ink);border-radius:12px;padding:2px 8px;font-size:.85rem;flex:none}
+.dcard span{min-width:0;font-size:.85rem}
+.dcard span b{display:block;font-size:.92rem}
+
+/* avatar editor */
+.editor{padding:12px 14px;display:grid;gap:8px}
+.editor[hidden]{display:none}
+.erow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.erow img{width:40px;height:40px;border-radius:50%;border:2px solid var(--ink);object-fit:cover;background:var(--pink-soft)}
+.erow input[type=text]{flex:1;min-width:90px;font:inherit;border:2px solid var(--ink);border-radius:10px;padding:3px 8px;background:var(--paper)}
+.up{border:2px solid var(--ink);border-radius:10px;padding:3px 10px;background:var(--sky-soft);font-size:.8rem;cursor:pointer}
+.up input{display:none}
+footer{text-align:center;font-size:.72rem;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
 </head>
 <body>
 <div class="wrap">
-<header>
-  <h1>2026 曼谷散步帖</h1>
-  <div class="sub">10/30（五）– 11/03（二）・高雄小港 ⇄ 曼谷素萬那普 BKK</div>
-  <div class="clocks">
-    <div class="clock th"><small>泰國現在</small><b id="cTH">--:--</b></div>
-    <div class="clock"><small>台灣現在（快 1 小時）</small><b id="cTW">--:--</b></div>
-    <div class="tools"><button class="btn" id="themeBtn" type="button">切換深色</button></div>
-  </div>
-  <span class="count" id="countdown"></span>
-</header>
+  <header>
+    <h1><span>2026 曼谷散步帖</span></h1>
+    <div class="sub">10/30（五）– 11/03（二）・小港 ⇄ 曼谷 BKK</div>
+    <div class="clocks">
+      <span class="pill th">🇹🇭 泰國 <b id="cTH">--:--</b></span>
+      <span class="pill">🇹🇼 台灣 <b id="cTW">--:--</b></span>
+      <span class="pill cd" id="cd"></span>
+    </div>
+  </header>
 
-<nav class="tabs" role="tablist" id="tabs"></nav>
+  <nav class="tabs" id="tabs" role="tablist"></nav>
+  <main id="main" style="display:grid;gap:14px"></main>
 
-<main id="day"></main>
-
-<section class="block">
-  <h2>出發前提醒</h2>
-  <div class="tips">
-    <div class="tip"><b>TDAC 泰國數位入境卡一定要填</b>入境泰國必填，免費，抵達前 3 天內可填（10/27 起）。只用官方網站 <a href="https://tdac.immigration.go.th" target="_blank" rel="noopener">tdac.immigration.go.th</a>，網路上有收費的假網站。</div>
-    <div class="tip"><b>10/30 第一晚 Save One Go 偏遠</b>夜市在城北賽邁區。17:35 落地，入境、領行李、到飯店常常已過 20:00，來回車程又長。累了就直接用 JOHNNY MARKET 備案。</div>
-    <div class="tip"><b>11/1 Safari World 回程會塞</b>園區在城東北郊外，週日傍晚回市區容易塞車。Somsak 17:00 可能晚到，White Wood Green 預約時段請留 30–60 分鐘緩衝。</div>
-    <div class="tip"><b>11/2 美功鐵道市場看火車</b>火車進出站時間固定，KKday 會照班次安排。集合時間是占位，報名後以 KKday 通知為準。</div>
-    <div class="tip"><b>11/3 最後一天時間最緊</b>Makkha 90 分鐘從 11:00 開始到 12:30 結束。14:30 出發機場不能延後；國際線建議起飛前約 3 小時到。</div>
-    <div class="tip"><b>10/31 是週六</b>洽圖洽週末市集週六、週日攤位最齊，這天去剛好。</div>
-  </div>
-</section>
-
-<section class="block">
-  <h2>待辦清單</h2>
-  <ul class="check" id="todo"></ul>
-</section>
-
-<footer>除航班已標示台灣時間外，表內均為泰國時間。地圖是示意圖，位置與距離不照比例，出發前請以 Google 地圖連結為準。</footer>
+  <footer>表內為泰國時間（航班另標台灣時間）。地圖是手帳示意插畫，不照比例；遠的地方旁邊標實際公里數。</footer>
 </div>
 
 <script>
-// ---------- data ----------
-// k: kind (fly/eat/spa/see/go), s: status (ok/tbd/alt), q: Google Maps search text
-const DAYS = [
- { id:"d1", date:"10/30", wd:"五", title:"出發・第一晚夜市",
-   sum:"下午從小港飛曼谷，晚上逛夜市、坐下喝一杯。",
-   stops:["airport","hotel","saveone","golden","hotel"],
-   items:[
-    {t:"12:00",ttl:"前往小港機場、報到",k:"go"},
-    {t:"13:00",ttl:"出境、候機",k:"go"},
-    {t:"14:45",ttl:"小港起飛",note:"台灣時間",k:"fly"},
-    {t:"17:35",ttl:"抵達 BKK",note:"泰國時間",k:"fly"},
-    {t:"18:00",ttl:"入境、領行李",k:"go"},
-    {t:"19:00",ttl:"搭車到飯店、入住放行李",note:"BKK 接送到飯店",k:"go",s:"tbd"},
-    {t:"20:00",ttl:"Save One Go 夜市",note:"若入住太晚改 JOHNNY MARKET",k:"eat",q:"Save One Go Market Bangkok"},
-    {t:"21:00",ttl:"夜市晚餐、逛攤",k:"eat"},
-    {t:"22:00",ttl:"GOLDEN HOUR BKK",note:"坐下休息、飲料或點心",k:"eat",q:"GOLDEN HOUR BKK"},
-    {t:"23:00",ttl:"回飯店",k:"go"}],
-   go:"BKK 接送到飯店；夜市往返搭 Grab。Save One Go 較遠。",
-   tbd:"每天按摩還沒預約。第一晚選住宿區晚營業的店，或 ONE MORE 候補。",
-   alt:"JOHNNY MARKET 可取代 Save One Go。"},
- { id:"d2", date:"10/31", wd:"六", title:"洽圖洽・CentralWorld",
-   sum:"週末市集、勝利紀念碑船麵，晚上 NARA 晚餐接 SPA。",
-   stops:["hotel","breakfast","chatuchak","victory","central","bhawa","hotel"],
-   items:[
-    {t:"08:00",ttl:"準備出門",k:"go"},
-    {t:"09:00",ttl:"飯店出發",k:"go"},
-    {t:"10:00",ttl:"Breakfast Story Eleven 早午餐",k:"eat",q:"Breakfast Story Bangkok"},
-    {t:"11:00",ttl:"洽圖洽週末市集",k:"see",q:"Chatuchak Weekend Market"},
-    {t:"13:00",ttl:"勝利紀念碑吃船麵",note:"BTS Mo Chit → Victory Monument",k:"eat",q:"Victory Monument boat noodles"},
-    {t:"14:00",ttl:"CentralWorld 逛街",k:"see",q:"CentralWorld Bangkok"},
-    {t:"18:30",ttl:"NARA Thai Cuisine 晚餐",note:"CentralWorld 7 樓・餐廳門口集合",k:"eat",s:"ok",q:"NARA Thai Cuisine CentralWorld"},
-    {t:"21:00",ttl:"BHAWA SPA on the eight 按摩 90 分",note:"時段待確認",k:"spa",s:"tbd",q:"BHAWA SPA on the eight Bangkok"},
-    {t:"22:30",ttl:"返回飯店",k:"go"}],
-   go:"BTS 到洽圖洽；之後轉 MRT。",
-   tbd:"BHAWA SPA 21:00 時段。",
-   alt:"Big C／勝利紀念碑船麵。"},
- { id:"d3", date:"11/1", wd:"日", title:"Safari World 一日",
-   sum:"KKday 接送去野生動物園，回城吃螃蟹粉絲煲、按摩。",
-   stops:["hotel","safari","ekkamai","hotel"],
-   items:[
-    {t:"08:00",ttl:"集合出發",note:"KKday 時段為占位",k:"go",s:"tbd"},
-    {t:"09:00",ttl:"Safari World",k:"see",q:"Safari World Bangkok"},
-    {t:"12:00",ttl:"園內午餐（自理）",k:"eat"},
-    {t:"13:00",ttl:"Safari World 下午場",k:"see"},
-    {t:"17:00",ttl:"Somsak 螃蟹粉絲煲",k:"eat",q:"Somsak Pu Ob Bangkok"},
-    {t:"20:00",ttl:"White Wood Green Ekkamai 按摩",k:"spa",s:"tbd",q:"White Wood Green Ekkamai"},
-    {t:"22:00",ttl:"返回飯店",k:"go"}],
-   go:"KKday 接送；Ekkamai 店和 Somsak 之間搭 Grab；回飯店 BTS 或 Grab。",
-   tbd:"KKday 集合點、下車點和回程。White Wood Green 可改 Makkha／ONE MORE。",
-   alt:"CRENN／eich 只在提早回城時二選一。"},
- { id:"d4", date:"11/2", wd:"一", title:"水上市場・鐵道市場",
-   sum:"KKday 丹嫩莎朵水上市場 + 美功鐵道市場，晚上 Big C、JOHNNY MARKET。",
-   stops:["hotel","market","ekkamai","johnny","infinity","hotel"],
-   items:[
-    {t:"08:00",ttl:"集合出發",note:"KKday 集合與接送時間待確認",k:"go",s:"tbd"},
-    {t:"09:00",ttl:"丹嫩莎朵水上市場 + 美功鐵道市場",note:"KKday 一日團",k:"see",q:"Damnoen Saduak Floating Market"},
-    {t:"12:00",ttl:"午餐（自理）",k:"eat"},
-    {t:"13:00",ttl:"美功鐵道市場",k:"see",q:"Maeklong Railway Market"},
-    {t:"15:00",ttl:"返回曼谷",k:"go"},
-    {t:"16:00",ttl:"Big C Ekkamai 採買",k:"see",q:"Big C Ekkamai"},
-    {t:"19:00",ttl:"JOHNNY MARKET 晚餐",k:"eat",q:"JOHNNY MARKET Bangkok"},
-    {t:"21:00",ttl:"Infinity Wellbeing 按摩",k:"spa",s:"tbd",q:"Infinity Wellbeing Bangkok"},
-    {t:"22:00",ttl:"按摩結束、返回飯店",k:"go"}],
-   go:"KKday 接送；JOHNNY MARKET、按摩店之間搭 Grab 或 BTS。",
-   tbd:"KKday 集合與接送時間。",
-   alt:"若保留按摩，需減少其他活動。"},
- { id:"d5", date:"11/3", wd:"二", title:"早午餐・按摩・回家",
-   sum:"退房寄行李，吃 Fran's、按摩，14:30 準時去機場。",
-   stops:["hotel","frans","s24","hotel","airport"],
-   items:[
-    {t:"08:00",ttl:"整理行李、退房寄放",k:"go"},
-    {t:"09:00",ttl:"Fran's Sukhumvit 49 早午餐",k:"eat",q:"Fran's Sukhumvit 49"},
-    {t:"10:00",ttl:"前往按摩店",note:"順路咖啡：librarycafe.bkk 素坤逸 24 店",k:"eat",q:"librarycafe.bkk Sukhumvit 24"},
-    {t:"11:00",ttl:"Makkha Sukhumvit 24 按摩 90 分",k:"spa",s:"tbd",q:"Makkha Sukhumvit 24"},
-    {t:"12:30",ttl:"按摩結束、簡單午餐",k:"eat"},
-    {t:"13:00",ttl:"回飯店領行李",k:"go"},
-    {t:"14:30",ttl:"出發前往 BKK",note:"不能延後",k:"go",s:"tbd"},
-    {t:"15:30",ttl:"目標抵達 BKK",k:"go"},
-    {t:"16:00",ttl:"報到、托運、出境",k:"go"},
-    {t:"18:35",ttl:"BKK 起飛",note:"泰國時間",k:"fly"},
-    {t:"22:55",ttl:"抵達小港",note:"台灣時間",k:"fly"},
-    {t:"23:00",ttl:"返家",k:"go"}],
-   go:"Fran's 和 Makkha 之間搭 Grab；回飯店取行李；機場接送要預約。",
-   tbd:"Makkha 90 分鐘時段；14:30 去機場不延後。",
-   alt:"ONE MORE 為按摩候補；不再加咖啡廳。"}
+// ===== characters (original drawings) =====
+const INK="#4a3a33";
+const svgURI=s=>"data:image/svg+xml;charset=utf-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">${s}</svg>`);
+const eyes=`<circle cx="25" cy="33" r="3" fill="${INK}"/><circle cx="39" cy="33" r="3" fill="${INK}"/><circle cx="26" cy="32" r="1" fill="#fff"/><circle cx="40" cy="32" r="1" fill="#fff"/><ellipse cx="19" cy="40" rx="4" ry="2.5" fill="#ffb3c4"/><ellipse cx="45" cy="40" rx="4" ry="2.5" fill="#ffb3c4"/>`;
+const FACES={
+  ele: svgURI(`<circle cx="12" cy="30" r="11" fill="#b8c4d2" stroke="${INK}" stroke-width="2.5"/><circle cx="52" cy="30" r="11" fill="#b8c4d2" stroke="${INK}" stroke-width="2.5"/><circle cx="32" cy="33" r="19" fill="#d4dde8" stroke="${INK}" stroke-width="2.5"/>${eyes}<path d="M32 40 q-1 10 6 13" fill="none" stroke="${INK}" stroke-width="9" stroke-linecap="round"/><path d="M32 40 q-1 10 6 13" fill="none" stroke="#d4dde8" stroke-width="4.5" stroke-linecap="round"/>`),
+  cat: svgURI(`<path d="M13 26 L16 8 L28 18 Z M51 26 L48 8 L36 18 Z" fill="#f3c48f" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="32" cy="35" r="20" fill="#f7d7ad" stroke="${INK}" stroke-width="2.5"/>${eyes}<path d="M28 41 q2 3 4 0 q2 3 4 0" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>`),
+  mango: svgURI(`<path d="M32 6 q8 -2 12 4 q-8 4 -12 0z" fill="#8fd27a" stroke="${INK}" stroke-width="2"/><ellipse cx="32" cy="35" rx="21" ry="22" fill="#ffd46a" stroke="${INK}" stroke-width="2.5"/>${eyes}<path d="M28 42 q4 4 8 0" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>`),
+  bear: svgURI(`<circle cx="15" cy="17" r="8" fill="#c99a72" stroke="${INK}" stroke-width="2.5"/><circle cx="49" cy="17" r="8" fill="#c99a72" stroke="${INK}" stroke-width="2.5"/><circle cx="32" cy="35" r="20" fill="#dbb18b" stroke="${INK}" stroke-width="2.5"/>${eyes}<ellipse cx="32" cy="43" rx="7" ry="5" fill="#f3dcc4" stroke="${INK}" stroke-width="2"/><circle cx="32" cy="41" r="2" fill="${INK}"/>`)
+};
+const DEFAULT_CREW=[
+  {id:"a",name:"小象阿南",img:FACES.ele,on:true},
+  {id:"b",name:"泰奶喵",img:FACES.cat,on:true},
+  {id:"c",name:"芒果妹",img:FACES.mango,on:true},
+  {id:"d",name:"嘟嘟熊",img:FACES.bear,on:true}
 ];
 
-// schematic positions on a 360x260 sketch (not to scale)
-const P = {
-  saveone:{x:150,y:30,n:"Save One Go"},
-  safari:{x:250,y:44,n:"Safari World"},
-  chatuchak:{x:110,y:78,n:"洽圖洽"},
-  victory:{x:108,y:118,n:"勝利紀念碑"},
-  central:{x:118,y:152,n:"CentralWorld"},
-  bhawa:{x:92,y:170,n:"BHAWA SPA"},
-  breakfast:{x:150,y:196,n:"早午餐"},
-  hotel:{x:180,y:170,n:"飯店"},
-  golden:{x:206,y:146,n:"GOLDEN HOUR"},
-  frans:{x:204,y:192,n:"Fran's"},
-  s24:{x:160,y:214,n:"Makkha・素坤逸24"},
-  ekkamai:{x:226,y:172,n:"Ekkamai"},
-  johnny:{x:224,y:208,n:"JOHNNY"},
-  infinity:{x:188,y:228,n:"Infinity"},
-  airport:{x:320,y:200,n:"BKK 機場"},
-  market:{x:24,y:236,n:"水上・鐵道市場 ≈100km"}
+// ===== map places: x,y on a 360x280 sketch (not to scale) =====
+const P={
+  khh:{x:316,y:28,n:"高雄小港",ic:"🏠"},
+  airport:{x:316,y:196,n:"BKK 機場",ic:"✈️",km:"市區約 30 km"},
+  hotel:{x:194,y:172,n:"飯店",ic:"🏨"},
+  saveone:{x:150,y:34,n:"Save One Go",ic:"🏮",km:"約 25 km"},
+  safari:{x:262,y:62,n:"Safari World",ic:"🦒",km:"約 25 km"},
+  chatuchak:{x:126,y:84,n:"洽圖洽",ic:"🛍️"},
+  victory:{x:120,y:122,n:"勝利紀念碑",ic:"🍜"},
+  central:{x:134,y:152,n:"CentralWorld",ic:"🛍️"},
+  bhawa:{x:100,y:180,n:"BHAWA SPA",ic:"💆"},
+  breakfast:{x:156,y:208,n:"Breakfast Story",ic:"🥞"},
+  golden:{x:226,y:146,n:"GOLDEN HOUR",ic:"🧋"},
+  ekkamai:{x:238,y:182,n:"Ekkamai",ic:"🦀"},
+  wwg:{x:262,y:166,n:"White Wood Green",ic:"💆"},
+  bigc:{x:252,y:200,n:"Big C",ic:"🛒"},
+  johnny:{x:226,y:224,n:"JOHNNY",ic:"🍢"},
+  infinity:{x:192,y:240,n:"Infinity",ic:"💆"},
+  frans:{x:226,y:206,n:"Fran's",ic:"🥐"},
+  s24:{x:166,y:226,n:"Makkha・素坤逸24",ic:"💆"},
+  market:{x:30,y:246,n:"水上・鐵道市場",ic:"🚤",km:"約 100 km"}
 };
 
-const KIND = {fly:"航班",eat:"吃",spa:"按摩",see:"逛",go:"移動"};
-const STAT = {ok:"已訂",tbd:"待確認",alt:"備案"};
+// ===== itinerary =====
+// k: go/fly/eat/spa/see  s: ok/tbd  p: place (for go/fly = destination)  tw: time shown in Taiwan time
+const DAYS=[
+ {id:"d1",date:"10/30",wd:"五",ic:"✈️",title:"Day 1：抵達、夜市散步",route:"小港 → BKK → 飯店 → 夜市",
+  items:[
+   {t:"12:00",ttl:"前往小港機場、報到",k:"go",p:"khh"},
+   {t:"13:00",ttl:"出境、候機",k:"go"},
+   {t:"14:45",tw:1,ttl:"小港起飛",k:"fly",p:"airport"},
+   {t:"17:35",ttl:"抵達 BKK",k:"fly",p:"airport"},
+   {t:"18:00",ttl:"入境、領行李",k:"go"},
+   {t:"19:00",ttl:"搭車到飯店、入住放行李",note:"BKK 接送到飯店",k:"go",p:"hotel",s:"tbd"},
+   {t:"20:00",ttl:"前往 Save One Go 夜市",note:"若入住太晚改 JOHNNY MARKET",k:"go",p:"saveone",q:"Save One Go Market Bangkok"},
+   {t:"21:00",ttl:"夜市晚餐、逛攤",k:"eat",p:"saveone"},
+   {t:"22:00",ttl:"GOLDEN HOUR BKK",note:"坐下休息、飲料或點心",k:"eat",p:"golden",q:"GOLDEN HOUR BKK"},
+   {t:"23:00",ttl:"回飯店",k:"go",p:"hotel"},
+   {t:"23:45",ttl:"晚安",k:"go"}],
+  go:"BKK 接送到飯店；夜市往返搭 Grab。Save One Go 較遠。",
+  tbd:"每天按摩還沒預約。第一晚選住宿區晚營業的店，或 ONE MORE 候補。",
+  alt:"JOHNNY MARKET 可取代 Save One Go。"},
+ {id:"d2",date:"10/31",wd:"六",ic:"🛍️",title:"Day 2：洽圖洽、CentralWorld",route:"早午餐 → 洽圖洽 → 船麵 → CentralWorld → SPA",
+  items:[
+   {t:"08:00",ttl:"準備出門",k:"go",p:"hotel"},
+   {t:"09:00",ttl:"飯店出發",k:"go",p:"breakfast"},
+   {t:"10:00",ttl:"Breakfast Story Eleven 早午餐",k:"eat",p:"breakfast",q:"Breakfast Story Bangkok"},
+   {t:"11:00",ttl:"洽圖洽週末市集",note:"BTS 到 Mo Chit",k:"see",p:"chatuchak",q:"Chatuchak Weekend Market"},
+   {t:"13:00",ttl:"勝利紀念碑吃船麵",note:"BTS Mo Chit → Victory Monument",k:"eat",p:"victory",q:"Victory Monument boat noodles"},
+   {t:"14:00",ttl:"CentralWorld 逛街",k:"see",p:"central",q:"CentralWorld Bangkok"},
+   {t:"18:30",ttl:"NARA Thai Cuisine 晚餐",note:"CentralWorld 7 樓・餐廳門口集合",k:"eat",p:"central",s:"ok",q:"NARA Thai Cuisine CentralWorld"},
+   {t:"21:00",ttl:"BHAWA SPA on the eight 90 分",note:"時段待確認",k:"spa",p:"bhawa",s:"tbd",q:"BHAWA SPA on the eight Bangkok"},
+   {t:"22:30",ttl:"返回飯店",k:"go",p:"hotel"},
+   {t:"23:15",ttl:"休息",k:"go"}],
+  go:"BTS 到洽圖洽；之後轉 MRT。",tbd:"BHAWA SPA 21:00 時段。",alt:"Big C／勝利紀念碑船麵。"},
+ {id:"d3",date:"11/1",wd:"日",ic:"🦒",title:"Day 3：Safari World 動物園",route:"飯店 → Safari World → Ekkamai",
+  items:[
+   {t:"08:00",ttl:"集合出發",note:"KKday 時段為占位",k:"go",p:"safari",s:"tbd"},
+   {t:"09:00",ttl:"Safari World",k:"see",p:"safari",q:"Safari World Bangkok"},
+   {t:"12:00",ttl:"園內午餐（自理）",k:"eat",p:"safari"},
+   {t:"13:00",ttl:"Safari World 下午場",k:"see",p:"safari"},
+   {t:"16:00",ttl:"KKday 回市區",note:"週日傍晚易塞車",k:"go",p:"ekkamai"},
+   {t:"17:00",ttl:"Somsak 螃蟹粉絲煲",k:"eat",p:"ekkamai",q:"Somsak Pu Ob Bangkok"},
+   {t:"20:00",ttl:"White Wood Green Ekkamai 按摩",k:"spa",p:"wwg",s:"tbd",q:"White Wood Green Ekkamai"},
+   {t:"22:00",ttl:"返回飯店",k:"go",p:"hotel"},
+   {t:"23:00",ttl:"休息",k:"go"}],
+  go:"KKday 接送；Ekkamai 店和 Somsak 之間搭 Grab；回飯店 BTS 或 Grab。",
+  tbd:"KKday 集合點、下車點和回程。White Wood Green 可改 Makkha／ONE MORE。",
+  alt:"CRENN／eich 只在提早回城時二選一。"},
+ {id:"d4",date:"11/2",wd:"一",ic:"🚤",title:"Day 4：水上市場、鐵道市場",route:"丹嫩莎朵 → 美功 → Big C → JOHNNY",
+  items:[
+   {t:"08:00",ttl:"集合出發",note:"KKday 集合與接送時間待確認",k:"go",p:"market",s:"tbd"},
+   {t:"10:00",ttl:"丹嫩莎朵水上市場",k:"see",p:"market",q:"Damnoen Saduak Floating Market"},
+   {t:"12:00",ttl:"午餐（自理）",k:"eat",p:"market"},
+   {t:"13:00",ttl:"美功鐵道市場",note:"火車進站時間固定，跟導遊走",k:"see",p:"market",q:"Maeklong Railway Market"},
+   {t:"15:00",ttl:"返回曼谷",k:"go",p:"bigc"},
+   {t:"16:30",ttl:"Big C Ekkamai 採買",k:"see",p:"bigc",q:"Big C Ekkamai"},
+   {t:"19:00",ttl:"JOHNNY MARKET 晚餐",k:"eat",p:"johnny",q:"JOHNNY MARKET Bangkok"},
+   {t:"21:00",ttl:"Infinity Wellbeing 按摩",k:"spa",p:"infinity",s:"tbd",q:"Infinity Wellbeing Bangkok"},
+   {t:"22:00",ttl:"按摩結束、返回飯店",k:"go",p:"hotel"},
+   {t:"23:00",ttl:"休息",k:"go"}],
+  go:"KKday 接送；JOHNNY MARKET、按摩店之間搭 Grab 或 BTS。",tbd:"KKday 集合與接送時間。",alt:"若保留按摩，需減少其他活動。"},
+ {id:"d5",date:"11/3",wd:"二",ic:"🥐",title:"Day 5：早午餐、按摩、回家",route:"Fran's → 素坤逸24 → 飯店 → BKK → 小港",
+  items:[
+   {t:"08:00",ttl:"整理行李、退房寄放",k:"go",p:"hotel"},
+   {t:"09:00",ttl:"Fran's Sukhumvit 49 早午餐",k:"eat",p:"frans",q:"Fran's Sukhumvit 49"},
+   {t:"10:00",ttl:"前往按摩店",note:"順路咖啡：librarycafe.bkk 素坤逸 24 店",k:"go",p:"s24",q:"librarycafe.bkk Sukhumvit 24"},
+   {t:"11:00",ttl:"Makkha Sukhumvit 24 按摩 90 分",k:"spa",p:"s24",s:"tbd",q:"Makkha Sukhumvit 24"},
+   {t:"12:30",ttl:"按摩結束、簡單午餐",k:"eat",p:"s24"},
+   {t:"13:00",ttl:"回飯店領行李",k:"go",p:"hotel"},
+   {t:"14:30",ttl:"出發前往 BKK",note:"不能延後",k:"go",p:"airport",s:"tbd"},
+   {t:"15:30",ttl:"目標抵達 BKK",k:"go",p:"airport"},
+   {t:"16:00",ttl:"報到、托運、出境",k:"go"},
+   {t:"18:35",ttl:"BKK 起飛",k:"fly",p:"khh"},
+   {t:"22:55",tw:1,ttl:"抵達小港",k:"fly",p:"khh"},
+   {t:"23:00",ttl:"返家",k:"go"}],
+  go:"Fran's 和 Makkha 之間搭 Grab；回飯店取行李；機場接送要預約。",
+  tbd:"Makkha 90 分鐘時段；14:30 去機場不延後。",alt:"ONE MORE 為按摩候補；不再加咖啡廳。"}
+];
+const KIND={fly:"航班",go:"移動",eat:"吃",spa:"按摩",see:"逛"};
 
-// ---------- helpers ----------
-const $ = s => document.querySelector(s);
-const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const gmap = q => "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
-const store = {
-  get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},
-  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-};
+// ===== helpers =====
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const gmap=q=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const toMin=s=>{const[a,b]=s.split(":").map(Number);return a*60+b};
+const hhmm=m=>{m=Math.round(m);const h=Math.floor(m/60)%24,mm=m%60;return String(h).padStart(2,"0")+":"+String(mm).padStart(2,"0")};
+const tzNow=(tz)=>new Intl.DateTimeFormat("en-GB",{timeZone:tz,hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date());
+const thDate=()=>{const s=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Bangkok",month:"numeric",day:"numeric"}).format(new Date());return s};
+let crew=store.get("bkk-crew")||DEFAULT_CREW;
+const saveCrew=()=>store.set("bkk-crew",crew);
 
-// ---------- clocks ----------
-function fmt(tz){return new Intl.DateTimeFormat("zh-TW",{timeZone:tz,hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date())}
-function tick(){ $("#cTH").textContent=fmt("Asia/Bangkok"); $("#cTW").textContent=fmt("Asia/Taipei"); }
-tick(); setInterval(tick,15000);
+// minutes in Thai time for each item
+DAYS.forEach(d=>d.items.forEach(it=>it.m=toMin(it.t)-(it.tw?60:0)));
 
-// countdown in Taiwan date
-(function(){
-  const tw = new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Taipei"}).format(new Date());
-  const today = new Date(tw+"T00:00:00Z"), start=new Date("2026-10-30T00:00:00Z"), end=new Date("2026-11-03T00:00:00Z");
-  const d = Math.round((start-today)/864e5);
-  const el=$("#countdown");
-  if(d>0) el.textContent="距離出發還有 "+d+" 天";
-  else if(today<=end) el.textContent="旅行中，玩得開心";
-  else el.hidden=true;
-})();
-
-// ---------- theme ----------
-(function(){
-  const btn=$("#themeBtn"), root=document.documentElement;
-  const isDark=()=>root.dataset.theme? root.dataset.theme==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  const label=()=>btn.textContent=isDark()?"切換淺色":"切換深色";
-  const saved=store.get("bkk-theme"); if(saved) root.dataset.theme=saved;
-  label();
-  btn.addEventListener("click",()=>{root.dataset.theme=isDark()?"light":"dark";store.set("bkk-theme",root.dataset.theme);label();});
-})();
-
-// ---------- map ----------
-let anim=null;
-function mapSVG(day){
-  const pts=day.stops.map(k=>P[k]);
-  const d=pts.map((p,i)=>(i?"L":"M")+p.x+" "+p.y).join(" ");
-  const used=[...new Set(day.stops)];
-  // faint background: river and roads sketch
-  let s=`<svg viewBox="0 0 360 260" role="img" aria-label="${esc(day.date)} 路線示意圖">
-  <path d="M60 0 C 80 60, 50 110, 80 150 S 70 230, 110 260" fill="none" stroke="var(--sky-soft)" stroke-width="10"/>
-  <text x="70" y="252" font-size="9" fill="var(--sky)" font-family="var(--f-body)">昭披耶河</text>
-  <path d="${d}" fill="none" stroke="var(--line)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path id="route" d="${d}" fill="none" stroke="var(--green)" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"/>`;
-  used.forEach(k=>{
-    const p=P[k], h=k==="hotel";
-    const right=p.x<280;
-    s+=`<circle cx="${p.x}" cy="${p.y}" r="${h?6:5}" fill="${h?"var(--gold)":"var(--paper)"}" stroke="${h?"var(--gold)":"var(--green)"}" stroke-width="2"/>
-    <text x="${p.x+(right?9:-9)}" y="${p.y+4}" font-size="10.5" text-anchor="${right?"start":"end"}" fill="var(--ink)" font-family="var(--f-body)" font-weight="500">${esc(p.n)}</text>`;
+// keyframes: list of [minute, place]. travel happens during go/fly items
+function frames(day){
+  const its=day.items; let cur=its.find(i=>i.p).p; const f=[[its[0].m,cur]];
+  its.forEach((it,i)=>{
+    if(!it.p||it.p===cur) return;
+    const next=its[i+1]?its[i+1].m:it.m+30;
+    if(it.k==="go"||it.k==="fly"){f.push([it.m,cur],[next,it.p]);}
+    else{const last=f[f.length-1][0];f.push([Math.max(last,it.m-30),cur],[it.m,it.p]);}
+    cur=it.p;
   });
-  s+=`<circle id="walker" r="6" fill="var(--orchid)" stroke="var(--paper)" stroke-width="2" cx="${pts[0].x}" cy="${pts[0].y}"/></svg>`;
-  return s;
+  return f;
 }
-function play(speed){
-  if(anim) cancelAnimationFrame(anim);
-  const path=$("#route"), w=$("#walker"); if(!path||!w) return;
-  const L=path.getTotalLength(), dur=6000/speed; let t0=null;
-  const step=ts=>{ if(!t0)t0=ts; const f=Math.min((ts-t0)/dur,1); const p=path.getPointAtLength(L*f);
-    w.setAttribute("cx",p.x); w.setAttribute("cy",p.y); if(f<1) anim=requestAnimationFrame(step); };
-  anim=requestAnimationFrame(step);
+function posAt(fr,m){
+  if(m<=fr[0][0]) return P[fr[0][1]];
+  for(let i=1;i<fr.length;i++){
+    const[a,pa]=fr[i-1],[b,pb]=fr[i];
+    if(m<=b){const A=P[pa],B=P[pb];const t=b>a?(m-a)/(b-a):1;return{x:A.x+(B.x-A.x)*t,y:A.y+(B.y-A.y)*t,moving:pa!==pb};}
+  }
+  return P[fr[fr.length-1][1]];
+}
+const curItem=(day,m)=>{let c=0;day.items.forEach((it,i)=>{if(it.m<=m)c=i});return c};
+
+// ===== map drawing =====
+function baseMap(){
+  return `<path d="M0 238 Q 40 226 60 250 T 120 280 L0 280Z" fill="var(--sky-soft)"/>
+  <path d="M74 0 C 92 50, 60 100, 82 140 S 72 220, 104 280" fill="none" stroke="var(--river)" stroke-width="14" stroke-linecap="round"/>
+  <text x="58" y="112" font-size="8" fill="#7fb6d6" transform="rotate(-80 58 112)">昭披耶河</text>
+  <ellipse cx="128" cy="70" rx="22" ry="12" fill="var(--park)"/><ellipse cx="300" cy="120" rx="26" ry="14" fill="var(--park)"/>
+  <path d="M110 30 V270 M90 160 H340" stroke="#f5dcb3" stroke-width="6" stroke-linecap="round"/>
+  <g fill="#fff" opacity=".9"><ellipse cx="200" cy="22" rx="16" ry="6"/><ellipse cx="210" cy="17" rx="9" ry="6"/><ellipse cx="44" cy="40" rx="13" ry="5"/></g>
+  <g font-size="9" fill="#e7b04d"><text x="180" y="96">✦</text><text x="290" y="250">✦</text><text x="20" y="150">✦</text></g>
+  <g transform="translate(300 232)"><path d="M0 18 L10 4 L20 18Z" fill="#ffd96a" stroke="${INK}" stroke-width="1.5"/><path d="M10 4 V-4" stroke="${INK}" stroke-width="1.5"/><rect x="3" y="18" width="14" height="6" fill="#ff9db4" stroke="${INK}" stroke-width="1.5"/></g>`;
+}
+function pin(k,label){
+  const p=P[k];const L=label||p.n;const w=L.length*7.2+12;
+  const lx=Math.min(356-w,Math.max(4,p.x-w/2));
+  return `<g><circle cx="${p.x}" cy="${p.y}" r="10" fill="#fff" stroke="${INK}" stroke-width="2"/>
+  <text x="${p.x}" y="${p.y+4}" font-size="11" text-anchor="middle">${p.ic}</text>
+  <rect x="${lx}" y="${p.y+12}" width="${w}" height="13" rx="6.5" fill="#fff" stroke="${INK}" stroke-width="1.2"/>
+  <text x="${lx+w/2}" y="${p.y+21.5}" font-size="8" text-anchor="middle" fill="${INK}" font-family="var(--f-cute)">${esc(L)}</text>
+  ${p.km?`<text x="${p.x}" y="${p.y-14}" font-size="7.5" text-anchor="middle" fill="#c07a1e" font-family="var(--f-cute)">${esc(p.km)}</text>`:""}</g>`;
+}
+function dayMap(day){
+  const fr=frames(day);const seq=[];fr.forEach(f=>{if(seq[seq.length-1]!==f[1])seq.push(f[1])});
+  const d=seq.map((k,i)=>(i?"L":"M")+P[k].x+" "+P[k].y).join(" ");
+  const seen={};let pins="";
+  day.items.forEach(it=>{if(it.p&&!seen[it.p]){seen[it.p]=1;pins+=pin(it.p,it.p==="hotel"||it.p==="khh"?null:(hhmm(it.m)+" "+P[it.p].n));}});
+  return `<svg viewBox="0 0 360 280" role="img" aria-label="${esc(day.date)} 路線插畫">${baseMap()}
+  <path d="${d}" fill="none" stroke="${INK}" stroke-width="1.6" stroke-dasharray="3 4" stroke-linecap="round"/>
+  ${pins}<g id="walker"></g></svg>`;
+}
+function allMap(){
+  const cols=["#f2676b","#e8a317","#3aa57a","#3d8fd1","#b062c9"];let s="";
+  DAYS.forEach((day,i)=>{const fr=frames(day);const seq=[];fr.forEach(f=>{if(seq[seq.length-1]!==f[1])seq.push(f[1])});
+    s+=`<path d="${seq.map((k,j)=>(j?"L":"M")+P[k].x+" "+P[k].y).join(" ")}" fill="none" stroke="${cols[i]}" stroke-width="2" stroke-dasharray="4 3" opacity=".85"/>`;});
+  let pins="";Object.keys(P).forEach(k=>pins+=pin(k));
+  const leg=DAYS.map((d,i)=>`<g transform="translate(${8+i*56} 8)"><rect width="50" height="14" rx="7" fill="#fff" stroke="${cols[i]}" stroke-width="2"/><text x="25" y="10.5" font-size="8" text-anchor="middle" fill="${INK}">${d.date}</text></g>`).join("");
+  return `<svg viewBox="0 0 360 280" role="img" aria-label="五天路線總覽">${baseMap()}${s}${pins}${leg}</svg>`;
+}
+function drawWalker(pos){
+  const g=$("#walker");if(!g)return;const on=crew.filter(c=>c.on);const n=Math.max(on.length,1);
+  let h=`<ellipse cx="0" cy="12" rx="${8+n*5}" ry="3" fill="${INK}" opacity=".15"/>`;
+  on.slice(0,4).forEach((c,i)=>{const x=(i-(Math.min(n,4)-1)/2)*13;
+    h+=`<clipPath id="cp${i}"><circle cx="${x}" cy="0" r="10"/></clipPath><circle cx="${x}" cy="0" r="11" fill="#fff" stroke="${INK}" stroke-width="1.5"/><image href="${c.img}" x="${x-10}" y="-10" width="20" height="20" clip-path="url(#cp${i})" preserveAspectRatio="xMidYMid slice"/>`;});
+  g.innerHTML=h;g.setAttribute("transform",`translate(${pos.x.toFixed(1)} ${(pos.y-20).toFixed(1)})`);
 }
 
-// ---------- render ----------
-function render(id){
-  const day=DAYS.find(x=>x.id===id)||DAYS[0];
-  document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.id===day.id));
-  const items=day.items.map(it=>`
-    <li class="item"><div class="t">${esc(it.t)}</div><div class="body">
-      <div class="ttl">${esc(it.ttl)} <span class="chip k-${it.k}">${KIND[it.k]}</span>${it.s?`<span class="chip s-${it.s}">${STAT[it.s]}</span>`:""}
-      ${it.q?`<a class="maplink" href="${gmap(it.q)}" target="_blank" rel="noopener">地圖 ↗</a>`:""}</div>
-      ${it.note?`<div class="note">${esc(it.note)}</div>`:""}
-    </div></li>`).join("");
-  $("#day").innerHTML=`
-    <h2 class="daytitle">${esc(day.date)}（${esc(day.wd)}）${esc(day.title)}</h2>
-    <p class="daysum">${esc(day.sum)}</p>
-    <div class="map">
-      <div class="maphead">路線示意（不照比例）<button class="btn" id="playBtn" type="button">▶ 走一次</button><button class="btn" id="spdBtn" type="button">×1</button></div>
-      ${mapSVG(day)}
-    </div>
-    <ol class="timeline">${items}</ol>
-    <div class="cards">
-      <div class="card"><h3>交通</h3><p>${esc(day.go)}</p></div>
-      <div class="card tbd"><h3>待確認</h3><p>${esc(day.tbd)}</p></div>
-      <div class="card"><h3>備選</h3><p>${esc(day.alt)}</p></div>
-    </div>`;
-  let spd=1;
-  $("#playBtn").onclick=()=>play(spd);
-  $("#spdBtn").onclick=e=>{spd=spd===1?2:spd===2?4:1;e.target.textContent="×"+spd;};
-  if(!matchMedia("(prefers-reduced-motion: reduce)").matches) play(1);
-  store.set("bkk-day",day.id);
+// ===== clocks & countdown =====
+function tick(){$("#cTH").textContent=tzNow("Asia/Bangkok");$("#cTW").textContent=tzNow("Asia/Taipei");}
+tick();setInterval(tick,15000);
+(function(){const tw=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Taipei"}).format(new Date());
+  const d=Math.round((new Date("2026-10-30T00:00:00Z")-new Date(tw+"T00:00:00Z"))/864e5);
+  const el=$("#cd");if(d>0)el.textContent="出發倒數 "+d+" 天";else if(d>=-4)el.textContent="旅行中 🌴";else el.hidden=true;})();
+
+// ===== player state =====
+let st={day:null,m:0,play:false,speed:4,live:false,raf:0,last:0};
+function setTime(m,fromUser){
+  const day=st.day;const lo=day.items[0].m,hi=day.items[day.items.length-1].m;
+  st.m=Math.max(lo,Math.min(hi,m));
+  const pos=posAt(frames(day),st.m);drawWalker(pos);
+  const ci=curItem(day,st.m),it=day.items[ci];
+  $("#clk").firstChild.nodeValue=hhmm(st.m);
+  $("#what").innerHTML=`${pos.moving?"🐾 前往 ":"📍 "}${esc(it.p&&pos.moving?P[it.p].n:it.ttl)}<small>${pos.moving?esc(it.ttl):(it.note?esc(it.note):"&nbsp;")}</small>`;
+  // show the next stop
+  const nx=day.items.slice(ci+1).find(x=>x.p&&x.p!==it.p&&!(x.k==="go"&&!x.p));
+  $("#next").innerHTML=nx?`下一站 <b>${hhmm(nx.m)}</b> ${P[nx.p].ic} ${esc(nx.ttl)}`:"今天行程結束，晚安 🌙";
+  const sl=$("#slider");if(!fromUser)sl.value=st.m;
+  document.querySelectorAll(".it").forEach((el,i)=>el.classList.toggle("cur",i===ci));
+}
+function loop(ts){
+  if(!st.play)return;const dt=st.last?(ts-st.last)/1000:0;st.last=ts;
+  const hi=st.day.items[st.day.items.length-1].m;
+  setTime(st.m+dt*st.speed*10);
+  if(st.m>=hi){setPlay(false);return;}
+  st.raf=requestAnimationFrame(loop);
+}
+function setPlay(on){
+  st.play=on;st.last=0;cancelAnimationFrame(st.raf);
+  const b=$("#playBtn");if(b){b.textContent=on?"❚❚":"▶";b.setAttribute("aria-label",on?"暫停":"播放");}
+  if(on){st.live=false;$("#liveBtn")?.setAttribute("aria-pressed","false");
+    if(st.m>=st.day.items[st.day.items.length-1].m)st.m=st.day.items[0].m;
+    st.raf=requestAnimationFrame(loop);}
+}
+function goLive(){
+  const[h,mm]=tzNow("Asia/Bangkok").split(":").map(Number);let m=h*60+mm;if(m<300)m+=1440;
+  setPlay(false);st.live=true;$("#liveBtn").setAttribute("aria-pressed","true");setTime(m);
+}
+setInterval(()=>{if(st.live&&st.day)goLive()},30000);
+
+// ===== render =====
+function crewChips(){
+  return crew.map(c=>`<button type="button" class="mate" data-c="${c.id}" aria-pressed="${c.on}"><img src="${c.img}" alt="">${esc(c.name)}</button>`).join("")+
+   `<button type="button" class="chipbtn" id="editBtn">✏️ 換角色</button>`;
+}
+function editor(){
+  return `<div class="box editor" id="editor" hidden><b style="font-size:.9rem">設定同行夥伴</b>
+   <span style="font-size:.75rem;color:var(--muted)">可換成自己的照片或圖片，只存在這支手機裡。</span>
+   ${crew.map(c=>`<div class="erow"><img src="${c.img}" alt=""><input type="text" id="nm-${c.id}" value="${esc(c.name)}" maxlength="8" aria-label="名字">
+   <label class="up">換圖片<input type="file" accept="image/*" data-up="${c.id}"></label>
+   <button type="button" class="up" data-reset="${c.id}">還原</button></div>`).join("")}
+   </div>`;
+}
+function bindCrew(){
+  document.querySelectorAll(".mate").forEach(b=>b.onclick=()=>{const c=crew.find(x=>x.id===b.dataset.c);c.on=!c.on;b.setAttribute("aria-pressed",c.on);saveCrew();if(st.day)setTime(st.m);});
+  const eb=$("#editBtn");if(eb)eb.onclick=()=>{const e=$("#editor");e.hidden=!e.hidden;};
+  document.querySelectorAll("[id^=nm-]").forEach(inp=>inp.onchange=()=>{crew.find(x=>x.id===inp.id.slice(3)).name=inp.value.trim()||"夥伴";saveCrew();rerender();});
+  document.querySelectorAll("[data-up]").forEach(inp=>inp.onchange=()=>{const f=inp.files[0];if(!f)return;
+    // shrink image so it fits in local storage
+    const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const cv=document.createElement("canvas");cv.width=cv.height=96;const g=cv.getContext("2d");
+      const s=Math.min(im.width,im.height);g.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,96,96);
+      crew.find(x=>x.id===inp.dataset.up).img=cv.toDataURL("image/jpeg",.85);saveCrew();rerender();};im.src=r.result;};r.readAsDataURL(f);});
+  document.querySelectorAll("[data-reset]").forEach(b=>b.onclick=()=>{const id=b.dataset.reset;const d=DEFAULT_CREW.find(x=>x.id===id);const c=crew.find(x=>x.id===id);c.img=d.img;c.name=d.name;saveCrew();rerender();});
+}
+let curTab="all";
+function rerender(){const keep=$("#editor")&&!$("#editor").hidden;render(curTab,true);if(keep)$("#editor").hidden=false;}
+
+function render(id,keepTime){
+  curTab=id;setPlay(false);
+  document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.id===id));
+  const main=$("#main");
+  if(id==="all"){st.day=null;st.live=false;
+    main.innerHTML=`
+    <div class="box dayhead"><img class="face" src="${FACES.ele}" alt=""><div><h2>五天曼谷散步總覽</h2><p>10/30 – 11/3・BTS、Grab、KKday 一起移動</p><span class="tagline">點上面的日期看每天路線 🐾</span></div></div>
+    <div class="box mapbox">${allMap()}<div class="player"><div class="crew">今日同行夥伴：${crewChips()}</div><p class="mapnote">✦ 地圖為手帳示意插畫，比例非實際距離；遠的地方標實際公里數。</p></div></div>
+    ${editor()}
+    <div class="box sec"><h2>📅 每天在做什麼</h2><div class="days">${DAYS.map(d=>`<button type="button" class="dcard" data-go="${d.id}"><span class="dt">${d.date}</span><span><b>${d.ic} ${esc(d.title.replace(/^Day \d：/,""))}</b>${esc(d.route)}</span></button>`).join("")}</div></div>
+    <div class="box sec"><h2>💡 出發前提醒</h2><div class="tips">
+      <div class="tip"><b>TDAC 泰國數位入境卡一定要填</b>入境必填、免費，抵達前 3 天內可填（10/27 起）。只用官網 <a href="https://tdac.immigration.go.th" target="_blank" rel="noopener">tdac.immigration.go.th</a>，有收費的假網站。</div>
+      <div class="tip"><b>10/30 Save One Go 偏遠</b>在城北賽邁區。17:35 落地，到飯店常已過 20:00，累了就改 JOHNNY MARKET。</div>
+      <div class="tip"><b>11/1 Safari World 回程會塞</b>週日傍晚回市區容易塞車，按摩預約留 30–60 分鐘緩衝。</div>
+      <div class="tip"><b>11/2 美功鐵道市場</b>火車進站時間固定，跟 KKday 導遊時間走。</div>
+      <div class="tip"><b>11/3 最緊</b>Makkha 11:00–12:30，14:30 去機場不能延後。</div>
+      <div class="tip"><b>10/31 是週六</b>洽圖洽週末市集攤位最齊，剛好。</div></div></div>
+    <div class="box sec"><h2>✅ 待辦清單</h2><ul class="todo" id="todo"></ul></div>`;
+    document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+    renderTodo();bindCrew();return;
+  }
+  const day=DAYS.find(d=>d.id===id);st.day=day;
+  main.innerHTML=`
+   <div class="box dayhead"><img class="face" src="${crew.find(c=>c.on)?.img||FACES.ele}" alt=""><div>
+     <h2>${esc(day.title)}</h2><p>2026/${esc(day.date)}（${esc(day.wd)}）・${esc(day.route)}</p>
+     <span class="tagline">${day.items.filter(i=>i.s==="tbd").length} 項待確認</span></div></div>
+   <div class="box mapbox">${dayMap(day)}
+     <div class="player">
+       <div class="now"><div class="clk" id="clk">--:--<small>泰國時間</small></div><div class="what" id="what"></div></div>
+       <div class="nextstop" id="next"></div>
+       <div class="ctrl"><button type="button" class="round" id="playBtn" aria-label="播放">▶</button>
+         <input type="range" id="slider" min="${day.items[0].m}" max="${day.items[day.items.length-1].m}" step="1" aria-label="時間">
+         <button type="button" class="chipbtn" id="spdBtn">×${st.speed}</button>
+         <button type="button" class="chipbtn live" id="liveBtn" aria-pressed="false">現在</button></div>
+       <div class="crew">今日同行夥伴：${crewChips()}</div>
+       <p class="mapnote">✦ 按「現在」會照手機的泰國時間移動；地圖是示意插畫，比例非實際距離。</p>
+     </div></div>
+   ${editor()}
+   <div class="box tl"><ol>${day.items.map(it=>`<li class="it"><div class="t">${esc(it.t)}${it.tw?"<small>台灣時間</small>":""}</div><div class="b">
+      <div class="ttl">${esc(it.ttl)}</div>${it.note?`<div class="note">${esc(it.note)}</div>`:""}
+      <div class="tags"><span class="tg k-${it.k}">${KIND[it.k]}</span>${it.s?`<span class="tg ${it.s}">${it.s==="ok"?"已訂":"待確認"}</span>`:""}${it.q?`<a class="gm" href="${gmap(it.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>`:""}</div></div></li>`).join("")}</ol></div>
+   <div class="notes"><div class="box note-card"><h3>🚕 交通</h3><p>${esc(day.go)}</p></div>
+     <div class="box note-card tbd"><h3>⏳ 待確認</h3><p>${esc(day.tbd)}</p></div>
+     <div class="box note-card"><h3>🔁 備選</h3><p>${esc(day.alt)}</p></div></div>`;
+  $("#slider").oninput=e=>{setPlay(false);st.live=false;$("#liveBtn").setAttribute("aria-pressed","false");setTime(+e.target.value,true);};
+  $("#playBtn").onclick=()=>setPlay(!st.play);
+  $("#spdBtn").onclick=e=>{st.speed=st.speed===1?2:st.speed===2?4:st.speed===4?8:1;e.target.textContent="×"+st.speed;};
+  $("#liveBtn").onclick=()=>{if(st.live){st.live=false;$("#liveBtn").setAttribute("aria-pressed","false");}else goLive();};
+  bindCrew();
+  const today=thDate()===day.date.replace(/^0/,"");
+  if(keepTime) setTime(st.m);
+  else if(today) goLive();
+  else{setTime(day.items[0].m);if(!matchMedia("(prefers-reduced-motion: reduce)").matches)setPlay(true);}
 }
 
-$("#tabs").innerHTML=DAYS.map(d=>`<button class="tab" role="tab" type="button" data-id="${d.id}"><b>${d.date}</b><span>週${d.wd}</span></button>`).join("");
-$("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab"); if(b){history.replaceState(null,"","#"+b.dataset.id); render(b.dataset.id);}});
+// ===== tabs =====
+$("#tabs").innerHTML=`<button class="tab" role="tab" type="button" data-id="all"><span class="ic">🗺️</span><b>總覽</b><small>五天地圖</small></button>`+
+  DAYS.map(d=>`<button class="tab" role="tab" type="button" data-id="${d.id}"><span class="ic">${d.ic}</span><b>${d.date}（${d.wd}）</b><small>${esc(d.title.replace(/^Day \d：/,"").split("、")[0])}</small></button>`).join("");
+function go(id){try{history.replaceState(null,"","#"+id)}catch(e){}render(id);const t=document.querySelector(`.tab[data-id="${id}"]`);t&&t.scrollIntoView({inline:"center",block:"nearest"});window.scrollTo({top:0});}
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b)go(b.dataset.id)});
 
-// pick start day: hash > today during trip > saved > first day
-(function(){
-  const h=location.hash.slice(1);
-  const th=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Bangkok",month:"numeric",day:"numeric"}).format(new Date());
-  const md=th.replace(/^(\d+)\/(\d+).*$/,"$1/$2");
-  const today=DAYS.find(d=>d.date===md);
-  render(DAYS.some(d=>d.id===h)?h:(today?today.id:(store.get("bkk-day")||"d1")));
-})();
+// ===== todo =====
+const TODO=["填 TDAC 泰國數位入境卡（10/27 起，官網免費）","預約 10/30 BKK 機場 → 飯店接送","預約 10/31 BHAWA SPA 21:00（90 分）","預約 11/1 White Wood Green Ekkamai（留塞車緩衝）","預約 11/2 Infinity Wellbeing 21:00","預約 11/3 Makkha Sukhumvit 24 11:00（90 分）","確認 KKday 兩天的集合點、時間、回程下車點","預約 11/3 飯店 → BKK 接送（14:30 出發）","確認飯店 11/3 退房後可寄放行李","手機裝好 Grab、換好泰銖現金"];
+function renderTodo(){const done=store.get("bkk-todo")||{};const ul=$("#todo");
+  ul.innerHTML=TODO.map((t,i)=>`<li><label for="td${i}"><input type="checkbox" id="td${i}" ${done[i]?"checked":""}><span>${esc(t)}</span></label></li>`).join("");
+  ul.onchange=e=>{done[e.target.id.slice(2)]=e.target.checked;store.set("bkk-todo",done);};}
 
-// ---------- checklist ----------
-const TODO=[
-  "填 TDAC 泰國數位入境卡（10/27 起可填，官網免費）",
-  "預約 10/30 BKK 機場 → 飯店接送",
-  "預約 10/31 BHAWA SPA 21:00（90 分）",
-  "預約 11/1 White Wood Green Ekkamai（留塞車緩衝）",
-  "預約 11/2 Infinity Wellbeing 21:00",
-  "預約 11/3 Makkha Sukhumvit 24 11:00（90 分）",
-  "確認 KKday 兩天的集合點、時間、回程下車點",
-  "預約 11/3 飯店 → BKK 接送（14:30 出發）",
-  "確認飯店 11/3 退房後可寄放行李",
-  "手機裝好 Grab、換好泰銖現金"
-];
-(function(){
-  const done=store.get("bkk-todo")||{};
-  $("#todo").innerHTML=TODO.map((t,i)=>`<li><label for="td${i}"><input type="checkbox" id="td${i}" ${done[i]?"checked":""}><span>${esc(t)}</span></label></li>`).join("");
-  $("#todo").addEventListener("change",e=>{const i=e.target.id.slice(2); done[i]=e.target.checked; store.set("bkk-todo",done);});
-})();
+// ===== start: hash > today's trip day > overview =====
+(function(){const h=location.hash.slice(1);const td=DAYS.find(d=>d.date===thDate());
+  go(h==="all"||DAYS.some(d=>d.id===h)?h:(td?td.id:"all"));})();
 </script>
 </body></html>
