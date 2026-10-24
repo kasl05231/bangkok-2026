@@ -63,6 +63,12 @@ header h1 span{background:linear-gradient(transparent 60%,var(--yellow) 60%);pad
 .now .clk small{display:block;font-family:var(--f-cute);font-size:.62rem;color:var(--muted);margin-top:2px}
 .now .what{min-width:0;font-weight:600;font-size:.92rem}
 .now .what small{display:block;color:var(--muted);font-weight:400;font-size:.75rem}
+.wx{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.8rem}
+.wx .w{background:var(--sky-soft);border:2px solid var(--ink);border-radius:999px;padding:1px 10px;font-weight:600}
+.wx .w b{font-family:var(--f-num)}
+.wx .tipx{background:var(--pink-soft);border-radius:999px;padding:1px 8px}
+.wx small{width:100%;color:var(--muted);font-size:.68rem}
+.wxs{display:block;font-size:.75rem;color:var(--muted)}
 .nextstop{margin-top:8px;background:var(--mint-soft);border:2px dashed var(--ink);border-radius:12px;padding:3px 10px;font-size:.82rem}
 .nextstop b{font-family:var(--f-num)}
 .ctrl{display:flex;align-items:center;gap:10px;margin-top:10px}
@@ -429,7 +435,7 @@ function render(id,keepTime){
     <div class="box dayhead"><img class="face" src="${FACES.ele}" alt=""><div><h2>五天曼谷散步總覽</h2><p>10/30 – 11/3・BTS、Grab、KKday 一起移動</p><span class="tagline">點上面的日期看每天路線 🐾</span></div></div>
     <div class="box mapbox">${allMap()}<div class="player"><div class="crew">今日同行夥伴：${crewChips()}</div><p class="mapnote">✦ 地圖為手帳示意插畫，比例非實際距離；遠的地方標實際公里數。</p></div></div>
     ${editor()}
-    <div class="box sec"><h2>📅 每天在做什麼</h2><div class="days">${DAYS.map(d=>`<button type="button" class="dcard" data-go="${d.id}"><span class="dt">${d.date}</span><span><b>${d.ic} ${esc(d.title.replace(/^Day \d：/,""))}</b>${esc(d.route)}</span></button>`).join("")}</div></div>
+    <div class="box sec"><h2>📅 每天在做什麼</h2><div class="days">${DAYS.map(d=>`<button type="button" class="dcard" data-go="${d.id}"><span class="dt">${d.date}</span><span><b>${d.ic} ${esc(d.title.replace(/^Day \d：/,""))}</b>${esc(d.route)}<span class="wxs" data-d="${d.date}"></span></span></button>`).join("")}</div></div>
     <div class="box sec"><h2>💡 出發前提醒</h2><div class="tips">
       <div class="tip"><b>TDAC 泰國數位入境卡一定要填</b>入境必填、免費，抵達前 3 天內可填（10/27 起）。只用官網 <a href="https://tdac.immigration.go.th" target="_blank" rel="noopener">tdac.immigration.go.th</a>，有收費的假網站。</div>
       <div class="tip"><b>10/30 Save One Go 偏遠</b>在城北賽邁區。17:35 落地，到飯店常已過 20:00，累了就改 JOHNNY MARKET。</div>
@@ -439,13 +445,13 @@ function render(id,keepTime){
       <div class="tip"><b>10/31 是週六</b>洽圖洽週末市集攤位最齊，剛好。</div></div></div>
     <div class="box sec"><h2>✅ 待辦清單</h2><ul class="todo" id="todo"></ul></div>`;
     document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
-    renderTodo();bindCrew();return;
+    renderTodo();bindCrew();fillWx();return;
   }
   const day=DAYS.find(d=>d.id===id);st.day=day;
   main.innerHTML=`
    <div class="box dayhead"><img class="face" src="${crew.find(c=>c.on)?.img||FACES.ele}" alt=""><div>
      <h2>${esc(day.title)}</h2><p>2026/${esc(day.date)}（${esc(day.wd)}）・${esc(day.route)}</p>
-     <span class="tagline">${day.items.filter(i=>i.s==="tbd").length} 項待確認</span></div></div>
+     <span class="tagline">${day.items.filter(i=>i.s==="tbd").length} 項待確認</span><div class="wx" id="wx" data-d="${day.date}"></div></div></div>
    <div class="box mapbox">${dayMap(day)}
      <div class="player">
        <div class="now"><div class="clk" id="clk">--:--<small>泰國時間</small></div><div class="what" id="what"></div></div>
@@ -468,11 +474,41 @@ function render(id,keepTime){
   $("#playBtn").onclick=()=>setPlay(!st.play);
   $("#spdBtn").onclick=e=>{st.speed=st.speed===1?2:st.speed===2?4:st.speed===4?8:1;e.target.textContent="×"+st.speed;};
   $("#liveBtn").onclick=()=>{if(st.live){st.live=false;$("#liveBtn").setAttribute("aria-pressed","false");}else goLive();};
-  bindCrew();
+  bindCrew();fillWx();
   const today=thDate()===day.date.replace(/^0/,"");
   if(keepTime) setTime(st.m);
   else if(today) goLive();
   else{setTime(day.items[0].m);if(!matchMedia("(prefers-reduced-motion: reduce)").matches)setPlay(true);}
+}
+
+// ===== weather (Open-Meteo, free, no key) =====
+const WX_URL="https://api.open-meteo.com/v1/forecast?latitude=13.75&longitude=100.52&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max&timezone=Asia%2FBangkok&start_date=2026-10-30&end_date=2026-11-03";
+let WX=null,WXAT=0,WXLOAD=true;
+const wxName=c=>c===0?["☀️","晴"]:c<=2?["🌤️","晴時多雲"]:c===3?["☁️","陰天"]:c<=48?["🌫️","霧"]:c<=57?["🌦️","毛毛雨"]:c<=67?["🌧️","下雨"]:c<=82?["🌦️","陣雨"]:["⛈️","雷雨"];
+async function loadWx(){
+  const c=store.get("bkk-wx");
+  if(c&&Date.now()-c.at<3*3600e3){WX=c.d;WXAT=c.at;WXLOAD=false;fillWx();return;}
+  try{
+    const r=await fetch(WX_URL);if(!r.ok)throw new Error("bad");
+    const j=await r.json();const d={};
+    j.daily.time.forEach((t,i)=>{const[,m,dd]=t.split("-");d[(+m)+"/"+(+dd)]={c:j.daily.weather_code[i],hi:j.daily.temperature_2m_max[i],lo:j.daily.temperature_2m_min[i],pp:j.daily.precipitation_probability_max[i],uv:j.daily.uv_index_max[i]};});
+    WX=d;WXAT=Date.now();store.set("bkk-wx",{at:WXAT,d});
+  }catch(e){if(c){WX=c.d;WXAT=c.at;}}
+  WXLOAD=false;fillWx();
+}
+function wxFor(date){
+  const w=WX&&WX[date];
+  if(!w&&WXLOAD) return {full:`<span class="w">🌤️ 天氣讀取中…</span>`,short:"🌤️ 讀取中…"};
+  if(!w||w.hi==null) return {full:`<span class="w">🌤️ 歷年平均 <b>32°/25°</b></span><span class="tipx">偶有午後陣雨</span><small>即時預報讀取不到，先顯示 11 月初曼谷平均</small>`,short:"🌤️ 平均 32°/25°"};
+  const[ic,tx]=wxName(w.c);const tips=[];
+  if(w.pp>=50)tips.push("☂️ 記得帶傘");if(w.hi>=33)tips.push("🧴 防曬補水");if(w.uv>=8)tips.push("😎 紫外線很強");
+  const t=new Date(WXAT).toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",hour12:false});
+  return {full:`<span class="w">${ic} ${tx} <b>${Math.round(w.hi)}°/${Math.round(w.lo)}°</b></span><span class="w">☔ <b>${w.pp??"-"}%</b></span>${tips.map(x=>`<span class="tipx">${x}</span>`).join("")}<small>曼谷天氣預報・${t} 更新（越接近出發越準）</small>`,
+          short:`${ic} ${Math.round(w.hi)}°/${Math.round(w.lo)}°・☔${w.pp??"-"}%`};
+}
+function fillWx(){
+  const a=document.getElementById("wx");if(a)a.innerHTML=wxFor(a.dataset.d).full;
+  document.querySelectorAll(".wxs").forEach(el=>el.textContent=wxFor(el.dataset.d).short);
 }
 
 // ===== tabs =====
@@ -487,6 +523,7 @@ function renderTodo(){const done=store.get("bkk-todo")||{};const ul=$("#todo");
   ul.innerHTML=TODO.map((t,i)=>`<li><label for="td${i}"><input type="checkbox" id="td${i}" ${done[i]?"checked":""}><span>${esc(t)}</span></label></li>`).join("");
   ul.onchange=e=>{done[e.target.id.slice(2)]=e.target.checked;store.set("bkk-todo",done);};}
 
+loadWx();
 // ===== start: hash > today's trip day > overview =====
 (function(){const h=location.hash.slice(1);const td=DAYS.find(d=>d.date===thDate());
   go(h==="all"||DAYS.some(d=>d.id===h)?h:(td?td.id:"all"));})();
