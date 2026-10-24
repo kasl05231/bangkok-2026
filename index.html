@@ -162,10 +162,10 @@ const FACES={
   bear: svgURI(`<circle cx="15" cy="17" r="8" fill="#c99a72" stroke="${INK}" stroke-width="2.5"/><circle cx="49" cy="17" r="8" fill="#c99a72" stroke="${INK}" stroke-width="2.5"/><circle cx="32" cy="35" r="20" fill="#dbb18b" stroke="${INK}" stroke-width="2.5"/>${eyes}<ellipse cx="32" cy="43" rx="7" ry="5" fill="#f3dcc4" stroke="${INK}" stroke-width="2"/><circle cx="32" cy="41" r="2" fill="${INK}"/>`)
 };
 const DEFAULT_CREW=[
-  {id:"a",name:"小象阿南",img:FACES.ele,on:true},
-  {id:"b",name:"泰奶喵",img:FACES.cat,on:true},
-  {id:"c",name:"芒果妹",img:FACES.mango,on:true},
-  {id:"d",name:"嘟嘟熊",img:FACES.bear,on:true}
+  {id:"a",name:"理事長",img:FACES.ele,on:true},
+  {id:"b",name:"彗瀞",img:FACES.cat,on:true},
+  {id:"c",name:"小公主",img:FACES.mango,on:true},
+  {id:"d",name:"丫黃",img:FACES.bear,on:true}
 ];
 
 // ===== map places: x,y on a 360x280 sketch (not to scale) =====
@@ -278,8 +278,8 @@ const toMin=s=>{const[a,b]=s.split(":").map(Number);return a*60+b};
 const hhmm=m=>{m=Math.round(m);const h=Math.floor(m/60)%24,mm=m%60;return String(h).padStart(2,"0")+":"+String(mm).padStart(2,"0")};
 const tzNow=(tz)=>new Intl.DateTimeFormat("en-GB",{timeZone:tz,hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date());
 const thDate=()=>{const s=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Bangkok",month:"numeric",day:"numeric"}).format(new Date());return s};
-let crew=store.get("bkk-crew")||DEFAULT_CREW;
-const saveCrew=()=>store.set("bkk-crew",crew);
+let crew=store.get("bkk-crew2")||DEFAULT_CREW;
+const saveCrew=()=>store.set("bkk-crew2",crew);
 
 // minutes in Thai time for each item
 DAYS.forEach(d=>d.items.forEach(it=>it.m=toMin(it.t)-(it.tw?60:0)));
