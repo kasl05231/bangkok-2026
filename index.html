@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>2026 曼谷散步帖</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: notebook page, sticky day tabs, schematic route map on top of a vertical timeline */
+:root{
+  --bg:#eef4ef; --paper:#fbfdfb; --ink:#1b2a23; --muted:#5d6f66; --line:#d3e0d7;
+  --green:#1d7a4b; --gold:#c98408; --orchid:#b23f74; --sky:#2c6fae; --grey:#6b7a73;
+  --gold-soft:#fbefd6; --orchid-soft:#f8e3ec; --green-soft:#dff0e5; --sky-soft:#e1ecf7;
+  --f-disp:"LXGW WenKai TC","Kaiti TC","STKaiti",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1714; --paper:#16211c; --ink:#e4eee8; --muted:#97aa9f; --line:#2a3a32;
+  --green:#5cc48a; --gold:#f0b440; --orchid:#e57aa8; --sky:#79b2e8; --grey:#9aa9a1;
+  --gold-soft:#3a2d12; --orchid-soft:#3a1d2a; --green-soft:#17352a; --sky-soft:#162c40; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1714; --paper:#16211c; --ink:#e4eee8; --muted:#97aa9f; --line:#2a3a32;
+  --green:#5cc48a; --gold:#f0b440; --orchid:#e57aa8; --sky:#79b2e8; --grey:#9aa9a1;
+  --gold-soft:#3a2d12; --orchid-soft:#3a1d2a; --green-soft:#17352a; --sky-soft:#162c40; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.6}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+header h1{font-family:var(--f-disp);font-size:2rem;margin:0;line-height:1.2;text-wrap:balance}
+header .sub{color:var(--muted);margin-top:4px}
+.clocks{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.clock{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-width:0}
+.clock small{display:block;color:var(--muted);font-size:.72rem;letter-spacing:.06em}
+.clock b{font-family:var(--f-num);font-size:1.25rem;font-variant-numeric:tabular-nums}
+.clock.th b{color:var(--green)}
+.tools{display:flex;gap:8px;margin-left:auto;align-items:center}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.85rem}
+.btn:focus-visible,.tab:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding-block:12px;margin-top:16px}
+.tab{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:6px 2px;color:var(--ink);text-align:center;line-height:1.25}
+.tab b{display:block;font-family:var(--f-num);font-size:.95rem}
+.tab span{font-size:.72rem;color:var(--muted)}
+.tab[aria-selected="true"]{background:var(--green);border-color:var(--green);color:var(--paper)}
+.tab[aria-selected="true"] span{color:var(--paper)}
+.daytitle{font-family:var(--f-disp);font-size:1.5rem;margin:8px 0 2px}
+.daysum{color:var(--muted);margin:0 0 12px}
+.map{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px}
+.map svg{display:block;width:100%;height:auto}
+.maphead{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted);flex-wrap:wrap}
+.maphead .btn{padding:3px 10px}
+.timeline{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:0}
+.item{display:grid;grid-template-columns:62px 1fr;gap:12px;padding:10px 0;border-top:1px dashed var(--line)}
+.item:first-child{border-top:0}
+.t{font-family:var(--f-num);font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:2px}
+.body{min-width:0}
+.ttl{font-weight:700;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.note{color:var(--muted);font-size:.88rem;margin-top:2px}
+.chip{font-size:.7rem;padding:1px 7px;border-radius:999px;font-weight:500;white-space:nowrap}
+.k-fly{background:var(--sky-soft);color:var(--sky)}
+.k-eat{background:var(--gold-soft);color:var(--gold)}
+.k-spa{background:var(--orchid-soft);color:var(--orchid)}
+.k-see{background:var(--green-soft);color:var(--green)}
+.k-go{background:var(--line);color:var(--grey)}
+.s-ok{border:1px solid var(--green);color:var(--green)}
+.s-tbd{border:1px solid var(--gold);color:var(--gold)}
+.s-alt{border:1px dashed var(--grey);color:var(--grey)}
+.maplink{font-size:.8rem;color:var(--sky);text-decoration:none;white-space:nowrap}
+.maplink:hover{text-decoration:underline}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:16px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.card h3{margin:0 0 4px;font-size:.78rem;letter-spacing:.08em;color:var(--muted);font-weight:500}
+.card p{margin:0;font-size:.9rem}
+.card.tbd{border-color:var(--gold)}
+section.block{margin-top:32px}
+section.block h2{font-family:var(--f-disp);font-size:1.3rem;margin:0 0 10px}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check label{display:flex;gap:10px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 10px;cursor:pointer}
+.check input{margin-top:5px;accent-color:var(--green);flex:none}
+.check input:checked + span{color:var(--muted);text-decoration:line-through}
+.tips{display:grid;gap:8px}
+.tip{background:var(--paper);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:8px 12px;font-size:.92rem}
+.tip b{display:block}
+.tip a{color:var(--sky)}
+.count{display:inline-block;margin-top:10px;background:var(--gold-soft);color:var(--gold);border-radius:999px;padding:3px 12px;font-size:.85rem;font-weight:500}
+footer{margin-top:28px;color:var(--muted);font-size:.8rem}
+@media (max-width:420px){header h1{font-size:1.6rem}.item{grid-template-columns:52px 1fr;gap:8px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>2026 曼谷散步帖</h1>
+  <div class="sub">10/30（五）– 11/03（二）・高雄小港 ⇄ 曼谷素萬那普 BKK</div>
+  <div class="clocks">
+    <div class="clock th"><small>泰國現在</small><b id="cTH">--:--</b></div>
+    <div class="clock"><small>台灣現在（快 1 小時）</small><b id="cTW">--:--</b></div>
+    <div class="tools"><button class="btn" id="themeBtn" type="button">切換深色</button></div>
+  </div>
+  <span class="count" id="countdown"></span>
+</header>
+
+<nav class="tabs" role="tablist" id="tabs"></nav>
+
+<main id="day"></main>
+
+<section class="block">
+  <h2>出發前提醒</h2>
+  <div class="tips">
+    <div class="tip"><b>TDAC 泰國數位入境卡一定要填</b>入境泰國必填，免費，抵達前 3 天內可填（10/27 起）。只用官方網站 <a href="https://tdac.immigration.go.th" target="_blank" rel="noopener">tdac.immigration.go.th</a>，網路上有收費的假網站。</div>
+    <div class="tip"><b>10/30 第一晚 Save One Go 偏遠</b>夜市在城北賽邁區。17:35 落地，入境、領行李、到飯店常常已過 20:00，來回車程又長。累了就直接用 JOHNNY MARKET 備案。</div>
+    <div class="tip"><b>11/1 Safari World 回程會塞</b>園區在城東北郊外，週日傍晚回市區容易塞車。Somsak 17:00 可能晚到，White Wood Green 預約時段請留 30–60 分鐘緩衝。</div>
+    <div class="tip"><b>11/2 美功鐵道市場看火車</b>火車進出站時間固定，KKday 會照班次安排。集合時間是占位，報名後以 KKday 通知為準。</div>
+    <div class="tip"><b>11/3 最後一天時間最緊</b>Makkha 90 分鐘從 11:00 開始到 12:30 結束。14:30 出發機場不能延後；國際線建議起飛前約 3 小時到。</div>
+    <div class="tip"><b>10/31 是週六</b>洽圖洽週末市集週六、週日攤位最齊，這天去剛好。</div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>待辦清單</h2>
+  <ul class="check" id="todo"></ul>
+</section>
+
+<footer>除航班已標示台灣時間外，表內均為泰國時間。地圖是示意圖，位置與距離不照比例，出發前請以 Google 地圖連結為準。</footer>
+</div>
+
+<script>
+// ---------- data ----------
+// k: kind (fly/eat/spa/see/go), s: status (ok/tbd/alt), q: Google Maps search text
+const DAYS = [
+ { id:"d1", date:"10/30", wd:"五", title:"出發・第一晚夜市",
+   sum:"下午從小港飛曼谷，晚上逛夜市、坐下喝一杯。",
+   stops:["airport","hotel","saveone","golden","hotel"],
+   items:[
+    {t:"12:00",ttl:"前往小港機場、報到",k:"go"},
+    {t:"13:00",ttl:"出境、候機",k:"go"},
+    {t:"14:45",ttl:"小港起飛",note:"台灣時間",k:"fly"},
+    {t:"17:35",ttl:"抵達 BKK",note:"泰國時間",k:"fly"},
+    {t:"18:00",ttl:"入境、領行李",k:"go"},
+    {t:"19:00",ttl:"搭車到飯店、入住放行李",note:"BKK 接送到飯店",k:"go",s:"tbd"},
+    {t:"20:00",ttl:"Save One Go 夜市",note:"若入住太晚改 JOHNNY MARKET",k:"eat",q:"Save One Go Market Bangkok"},
+    {t:"21:00",ttl:"夜市晚餐、逛攤",k:"eat"},
+    {t:"22:00",ttl:"GOLDEN HOUR BKK",note:"坐下休息、飲料或點心",k:"eat",q:"GOLDEN HOUR BKK"},
+    {t:"23:00",ttl:"回飯店",k:"go"}],
+   go:"BKK 接送到飯店；夜市往返搭 Grab。Save One Go 較遠。",
+   tbd:"每天按摩還沒預約。第一晚選住宿區晚營業的店，或 ONE MORE 候補。",
+   alt:"JOHNNY MARKET 可取代 Save One Go。"},
+ { id:"d2", date:"10/31", wd:"六", title:"洽圖洽・CentralWorld",
+   sum:"週末市集、勝利紀念碑船麵，晚上 NARA 晚餐接 SPA。",
+   stops:["hotel","breakfast","chatuchak","victory","central","bhawa","hotel"],
+   items:[
+    {t:"08:00",ttl:"準備出門",k:"go"},
+    {t:"09:00",ttl:"飯店出發",k:"go"},
+    {t:"10:00",ttl:"Breakfast Story Eleven 早午餐",k:"eat",q:"Breakfast Story Bangkok"},
+    {t:"11:00",ttl:"洽圖洽週末市集",k:"see",q:"Chatuchak Weekend Market"},
+    {t:"13:00",ttl:"勝利紀念碑吃船麵",note:"BTS Mo Chit → Victory Monument",k:"eat",q:"Victory Monument boat noodles"},
+    {t:"14:00",ttl:"CentralWorld 逛街",k:"see",q:"CentralWorld Bangkok"},
+    {t:"18:30",ttl:"NARA Thai Cuisine 晚餐",note:"CentralWorld 7 樓・餐廳門口集合",k:"eat",s:"ok",q:"NARA Thai Cuisine CentralWorld"},
+    {t:"21:00",ttl:"BHAWA SPA on the eight 按摩 90 分",note:"時段待確認",k:"spa",s:"tbd",q:"BHAWA SPA on the eight Bangkok"},
+    {t:"22:30",ttl:"返回飯店",k:"go"}],
+   go:"BTS 到洽圖洽；之後轉 MRT。",
+   tbd:"BHAWA SPA 21:00 時段。",
+   alt:"Big C／勝利紀念碑船麵。"},
+ { id:"d3", date:"11/1", wd:"日", title:"Safari World 一日",
+   sum:"KKday 接送去野生動物園，回城吃螃蟹粉絲煲、按摩。",
+   stops:["hotel","safari","ekkamai","hotel"],
+   items:[
+    {t:"08:00",ttl:"集合出發",note:"KKday 時段為占位",k:"go",s:"tbd"},
+    {t:"09:00",ttl:"Safari World",k:"see",q:"Safari World Bangkok"},
+    {t:"12:00",ttl:"園內午餐（自理）",k:"eat"},
+    {t:"13:00",ttl:"Safari World 下午場",k:"see"},
+    {t:"17:00",ttl:"Somsak 螃蟹粉絲煲",k:"eat",q:"Somsak Pu Ob Bangkok"},
+    {t:"20:00",ttl:"White Wood Green Ekkamai 按摩",k:"spa",s:"tbd",q:"White Wood Green Ekkamai"},
+    {t:"22:00",ttl:"返回飯店",k:"go"}],
+   go:"KKday 接送；Ekkamai 店和 Somsak 之間搭 Grab；回飯店 BTS 或 Grab。",
+   tbd:"KKday 集合點、下車點和回程。White Wood Green 可改 Makkha／ONE MORE。",
+   alt:"CRENN／eich 只在提早回城時二選一。"},
+ { id:"d4", date:"11/2", wd:"一", title:"水上市場・鐵道市場",
+   sum:"KKday 丹嫩莎朵水上市場 + 美功鐵道市場，晚上 Big C、JOHNNY MARKET。",
+   stops:["hotel","market","ekkamai","johnny","infinity","hotel"],
+   items:[
+    {t:"08:00",ttl:"集合出發",note:"KKday 集合與接送時間待確認",k:"go",s:"tbd"},
+    {t:"09:00",ttl:"丹嫩莎朵水上市場 + 美功鐵道市場",note:"KKday 一日團",k:"see",q:"Damnoen Saduak Floating Market"},
+    {t:"12:00",ttl:"午餐（自理）",k:"eat"},
+    {t:"13:00",ttl:"美功鐵道市場",k:"see",q:"Maeklong Railway Market"},
+    {t:"15:00",ttl:"返回曼谷",k:"go"},
+    {t:"16:00",ttl:"Big C Ekkamai 採買",k:"see",q:"Big C Ekkamai"},
+    {t:"19:00",ttl:"JOHNNY MARKET 晚餐",k:"eat",q:"JOHNNY MARKET Bangkok"},
+    {t:"21:00",ttl:"Infinity Wellbeing 按摩",k:"spa",s:"tbd",q:"Infinity Wellbeing Bangkok"},
+    {t:"22:00",ttl:"按摩結束、返回飯店",k:"go"}],
+   go:"KKday 接送；JOHNNY MARKET、按摩店之間搭 Grab 或 BTS。",
+   tbd:"KKday 集合與接送時間。",
+   alt:"若保留按摩，需減少其他活動。"},
+ { id:"d5", date:"11/3", wd:"二", title:"早午餐・按摩・回家",
+   sum:"退房寄行李，吃 Fran's、按摩，14:30 準時去機場。",
+   stops:["hotel","frans","s24","hotel","airport"],
+   items:[
+    {t:"08:00",ttl:"整理行李、退房寄放",k:"go"},
+    {t:"09:00",ttl:"Fran's Sukhumvit 49 早午餐",k:"eat",q:"Fran's Sukhumvit 49"},
+    {t:"10:00",ttl:"前往按摩店",note:"順路咖啡：librarycafe.bkk 素坤逸 24 店",k:"eat",q:"librarycafe.bkk Sukhumvit 24"},
+    {t:"11:00",ttl:"Makkha Sukhumvit 24 按摩 90 分",k:"spa",s:"tbd",q:"Makkha Sukhumvit 24"},
+    {t:"12:30",ttl:"按摩結束、簡單午餐",k:"eat"},
+    {t:"13:00",ttl:"回飯店領行李",k:"go"},
+    {t:"14:30",ttl:"出發前往 BKK",note:"不能延後",k:"go",s:"tbd"},
+    {t:"15:30",ttl:"目標抵達 BKK",k:"go"},
+    {t:"16:00",ttl:"報到、托運、出境",k:"go"},
+    {t:"18:35",ttl:"BKK 起飛",note:"泰國時間",k:"fly"},
+    {t:"22:55",ttl:"抵達小港",note:"台灣時間",k:"fly"},
+    {t:"23:00",ttl:"返家",k:"go"}],
+   go:"Fran's 和 Makkha 之間搭 Grab；回飯店取行李；機場接送要預約。",
+   tbd:"Makkha 90 分鐘時段；14:30 去機場不延後。",
+   alt:"ONE MORE 為按摩候補；不再加咖啡廳。"}
+];
+
+// schematic positions on a 360x260 sketch (not to scale)
+const P = {
+  saveone:{x:150,y:30,n:"Save One Go"},
+  safari:{x:250,y:44,n:"Safari World"},
+  chatuchak:{x:110,y:78,n:"洽圖洽"},
+  victory:{x:108,y:118,n:"勝利紀念碑"},
+  central:{x:118,y:152,n:"CentralWorld"},
+  bhawa:{x:92,y:170,n:"BHAWA SPA"},
+  breakfast:{x:150,y:196,n:"早午餐"},
+  hotel:{x:180,y:170,n:"飯店"},
+  golden:{x:206,y:146,n:"GOLDEN HOUR"},
+  frans:{x:204,y:192,n:"Fran's"},
+  s24:{x:160,y:214,n:"Makkha・素坤逸24"},
+  ekkamai:{x:226,y:172,n:"Ekkamai"},
+  johnny:{x:224,y:208,n:"JOHNNY"},
+  infinity:{x:188,y:228,n:"Infinity"},
+  airport:{x:320,y:200,n:"BKK 機場"},
+  market:{x:24,y:236,n:"水上・鐵道市場 ≈100km"}
+};
+
+const KIND = {fly:"航班",eat:"吃",spa:"按摩",see:"逛",go:"移動"};
+const STAT = {ok:"已訂",tbd:"待確認",alt:"備案"};
+
+// ---------- helpers ----------
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const gmap = q => "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
+const store = {
+  get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+
+// ---------- clocks ----------
+function fmt(tz){return new Intl.DateTimeFormat("zh-TW",{timeZone:tz,hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date())}
+function tick(){ $("#cTH").textContent=fmt("Asia/Bangkok"); $("#cTW").textContent=fmt("Asia/Taipei"); }
+tick(); setInterval(tick,15000);
+
+// countdown in Taiwan date
+(function(){
+  const tw = new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Taipei"}).format(new Date());
+  const today = new Date(tw+"T00:00:00Z"), start=new Date("2026-10-30T00:00:00Z"), end=new Date("2026-11-03T00:00:00Z");
+  const d = Math.round((start-today)/864e5);
+  const el=$("#countdown");
+  if(d>0) el.textContent="距離出發還有 "+d+" 天";
+  else if(today<=end) el.textContent="旅行中，玩得開心";
+  else el.hidden=true;
+})();
+
+// ---------- theme ----------
+(function(){
+  const btn=$("#themeBtn"), root=document.documentElement;
+  const isDark=()=>root.dataset.theme? root.dataset.theme==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  const label=()=>btn.textContent=isDark()?"切換淺色":"切換深色";
+  const saved=store.get("bkk-theme"); if(saved) root.dataset.theme=saved;
+  label();
+  btn.addEventListener("click",()=>{root.dataset.theme=isDark()?"light":"dark";store.set("bkk-theme",root.dataset.theme);label();});
+})();
+
+// ---------- map ----------
+let anim=null;
+function mapSVG(day){
+  const pts=day.stops.map(k=>P[k]);
+  const d=pts.map((p,i)=>(i?"L":"M")+p.x+" "+p.y).join(" ");
+  const used=[...new Set(day.stops)];
+  // faint background: river and roads sketch
+  let s=`<svg viewBox="0 0 360 260" role="img" aria-label="${esc(day.date)} 路線示意圖">
+  <path d="M60 0 C 80 60, 50 110, 80 150 S 70 230, 110 260" fill="none" stroke="var(--sky-soft)" stroke-width="10"/>
+  <text x="70" y="252" font-size="9" fill="var(--sky)" font-family="var(--f-body)">昭披耶河</text>
+  <path d="${d}" fill="none" stroke="var(--line)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="route" d="${d}" fill="none" stroke="var(--green)" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"/>`;
+  used.forEach(k=>{
+    const p=P[k], h=k==="hotel";
+    const right=p.x<280;
+    s+=`<circle cx="${p.x}" cy="${p.y}" r="${h?6:5}" fill="${h?"var(--gold)":"var(--paper)"}" stroke="${h?"var(--gold)":"var(--green)"}" stroke-width="2"/>
+    <text x="${p.x+(right?9:-9)}" y="${p.y+4}" font-size="10.5" text-anchor="${right?"start":"end"}" fill="var(--ink)" font-family="var(--f-body)" font-weight="500">${esc(p.n)}</text>`;
+  });
+  s+=`<circle id="walker" r="6" fill="var(--orchid)" stroke="var(--paper)" stroke-width="2" cx="${pts[0].x}" cy="${pts[0].y}"/></svg>`;
+  return s;
+}
+function play(speed){
+  if(anim) cancelAnimationFrame(anim);
+  const path=$("#route"), w=$("#walker"); if(!path||!w) return;
+  const L=path.getTotalLength(), dur=6000/speed; let t0=null;
+  const step=ts=>{ if(!t0)t0=ts; const f=Math.min((ts-t0)/dur,1); const p=path.getPointAtLength(L*f);
+    w.setAttribute("cx",p.x); w.setAttribute("cy",p.y); if(f<1) anim=requestAnimationFrame(step); };
+  anim=requestAnimationFrame(step);
+}
+
+// ---------- render ----------
+function render(id){
+  const day=DAYS.find(x=>x.id===id)||DAYS[0];
+  document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.id===day.id));
+  const items=day.items.map(it=>`
+    <li class="item"><div class="t">${esc(it.t)}</div><div class="body">
+      <div class="ttl">${esc(it.ttl)} <span class="chip k-${it.k}">${KIND[it.k]}</span>${it.s?`<span class="chip s-${it.s}">${STAT[it.s]}</span>`:""}
+      ${it.q?`<a class="maplink" href="${gmap(it.q)}" target="_blank" rel="noopener">地圖 ↗</a>`:""}</div>
+      ${it.note?`<div class="note">${esc(it.note)}</div>`:""}
+    </div></li>`).join("");
+  $("#day").innerHTML=`
+    <h2 class="daytitle">${esc(day.date)}（${esc(day.wd)}）${esc(day.title)}</h2>
+    <p class="daysum">${esc(day.sum)}</p>
+    <div class="map">
+      <div class="maphead">路線示意（不照比例）<button class="btn" id="playBtn" type="button">▶ 走一次</button><button class="btn" id="spdBtn" type="button">×1</button></div>
+      ${mapSVG(day)}
+    </div>
+    <ol class="timeline">${items}</ol>
+    <div class="cards">
+      <div class="card"><h3>交通</h3><p>${esc(day.go)}</p></div>
+      <div class="card tbd"><h3>待確認</h3><p>${esc(day.tbd)}</p></div>
+      <div class="card"><h3>備選</h3><p>${esc(day.alt)}</p></div>
+    </div>`;
+  let spd=1;
+  $("#playBtn").onclick=()=>play(spd);
+  $("#spdBtn").onclick=e=>{spd=spd===1?2:spd===2?4:1;e.target.textContent="×"+spd;};
+  if(!matchMedia("(prefers-reduced-motion: reduce)").matches) play(1);
+  store.set("bkk-day",day.id);
+}
+
+$("#tabs").innerHTML=DAYS.map(d=>`<button class="tab" role="tab" type="button" data-id="${d.id}"><b>${d.date}</b><span>週${d.wd}</span></button>`).join("");
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab"); if(b){history.replaceState(null,"","#"+b.dataset.id); render(b.dataset.id);}});
+
+// pick start day: hash > today during trip > saved > first day
+(function(){
+  const h=location.hash.slice(1);
+  const th=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Bangkok",month:"numeric",day:"numeric"}).format(new Date());
+  const md=th.replace(/^(\d+)\/(\d+).*$/,"$1/$2");
+  const today=DAYS.find(d=>d.date===md);
+  render(DAYS.some(d=>d.id===h)?h:(today?today.id:(store.get("bkk-day")||"d1")));
+})();
+
+// ---------- checklist ----------
+const TODO=[
+  "填 TDAC 泰國數位入境卡（10/27 起可填，官網免費）",
+  "預約 10/30 BKK 機場 → 飯店接送",
+  "預約 10/31 BHAWA SPA 21:00（90 分）",
+  "預約 11/1 White Wood Green Ekkamai（留塞車緩衝）",
+  "預約 11/2 Infinity Wellbeing 21:00",
+  "預約 11/3 Makkha Sukhumvit 24 11:00（90 分）",
+  "確認 KKday 兩天的集合點、時間、回程下車點",
+  "預約 11/3 飯店 → BKK 接送（14:30 出發）",
+  "確認飯店 11/3 退房後可寄放行李",
+  "手機裝好 Grab、換好泰銖現金"
+];
+(function(){
+  const done=store.get("bkk-todo")||{};
+  $("#todo").innerHTML=TODO.map((t,i)=>`<li><label for="td${i}"><input type="checkbox" id="td${i}" ${done[i]?"checked":""}><span>${esc(t)}</span></label></li>`).join("");
+  $("#todo").addEventListener("change",e=>{const i=e.target.id.slice(2); done[i]=e.target.checked; store.set("bkk-todo",done);});
+})();
+</script>
+</body></html>
