@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>2026 曼谷散步帖</title>
+<title>曼谷五日小旅行</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -162,7 +162,7 @@ footer{text-align:center;font-size:.72rem;color:var(--muted)}
       <path d="M18 34 Q8 30 10 22" fill="none" stroke="#d9a21b" stroke-width="3" stroke-linecap="round"/>
       <path d="M132 34 Q142 30 140 22" fill="none" stroke="#d9a21b" stroke-width="3" stroke-linecap="round"/>
       <rect x="14" y="34" width="122" height="6" rx="2" fill="#d9a21b" stroke="#4a3329" stroke-width="1.5"/></svg>
-    <h1><span>2026 曼谷散步帖</span></h1>
+    <h1><span>曼谷五日小旅行</span></h1>
     <div class="thai" lang="th">สวัสดี กรุงเทพฯ ・ 你好，曼谷</div>
     <div class="sub">10/30（五）– 11/03（二）・小港 ⇄ 曼谷 BKK</div>
     <div class="clocks">
@@ -459,7 +459,7 @@ function render(id,keepTime){
   const main=$("#main");
   if(id==="all"){st.day=null;st.live=false;
     main.innerHTML=`
-    <div class="box dayhead" style="display:block"><div class="band"></div><div style="display:flex;gap:12px;align-items:flex-start"><img class="face" src="${FACES.ele}" alt=""><div><h2>五天曼谷散步總覽</h2><p>10/30 – 11/3・BTS、Grab、KKday 一起移動</p><span class="tagline">點上面的日期看每天路線 🐾</span></div></div></div>
+    <div class="box dayhead" style="display:block"><div class="band"></div><div style="display:flex;gap:12px;align-items:flex-start"><img class="face" src="${FACES.ele}" alt=""><div><h2>曼谷五日小旅行總覽</h2><p>10/30 – 11/3・BTS、Grab、KKday 一起移動</p><span class="tagline">點上面的日期看每天路線 🐾</span></div></div></div>
     <div class="box mapbox">${allMap()}<div class="player"><div class="crew">今日同行夥伴：${crewChips()}</div><p class="mapnote">✦ 地圖為手帳示意插畫，比例非實際距離；遠的地方標實際公里數。</p></div></div>
     ${editor()}
     <div class="box sec"><h2>📅 每天在做什麼</h2><div class="days">${DAYS.map(d=>`<button type="button" class="dcard" data-go="${d.id}" style="--dc:${d.dc}"><span class="dt">${d.date}</span><span><b>${d.ic} ${esc(d.title.replace(/^Day \d：/,""))}</b>${esc(d.route)}<span class="wxs" data-d="${d.date}"></span></span></button>`).join("")}</div></div>
