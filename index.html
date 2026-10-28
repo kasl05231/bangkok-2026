@@ -3,6 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="曼谷小旅行">
+<meta name="theme-color" content="#ffe08a">
 <title>曼谷五日小旅行</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,6 +85,50 @@ header h1 span{background:linear-gradient(transparent 60%,var(--gold-soft) 60%);
 .wx .tipx{background:var(--pink-soft);border-radius:999px;padding:1px 8px}
 .wx small{width:100%;color:var(--muted);font-size:.68rem}
 .wxs{display:block;font-size:.75rem;color:var(--muted)}
+.today{padding:12px 14px;display:grid;gap:8px;background:var(--mint-soft)}
+.today .hd{display:flex;align-items:center;gap:8px;font-weight:800}
+.today .hd small{font-weight:400;color:var(--muted);font-size:.75rem}
+.today .row{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:baseline;font-size:.9rem}
+.today .row b{font-family:var(--f-num)}
+.today .lab{font-size:.72rem;color:var(--muted)}
+.acts{display:flex;flex-wrap:wrap;gap:6px}
+.abtn{border:2px solid var(--ink);border-radius:999px;padding:3px 12px;font-size:.8rem;font-weight:600;background:var(--paper);text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;gap:4px}
+.abtn.pri{background:var(--yellow)}
+.dur{font-size:.68rem;color:var(--muted);border:1.5px dashed var(--line);border-radius:999px;padding:0 7px}
+.drv{font:inherit;font-size:.7rem;border:1.5px solid var(--ink);border-radius:999px;padding:0 8px;background:var(--pink-soft)}
+.warn{font-size:.75rem;background:#fff0e0;border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:2px 8px;margin-top:4px}
+.energy{display:inline-flex;gap:2px;margin-left:6px;vertical-align:middle}
+.energy i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--ink);background:var(--paper);display:inline-block}
+.energy i.on{background:var(--red)}
+.dens{font-size:.75rem;color:var(--muted)}
+/* modal (Thai card) */
+.modal{position:fixed;inset:0;z-index:40;background:rgba(60,40,35,.45);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.card-th{background:var(--paper);border:3px solid var(--ink);border-radius:24px;padding:18px 18px 14px;width:min(100%,460px);max-height:90vh;overflow:auto;display:grid;gap:10px;text-align:center}
+.card-th .big{font-size:clamp(1.8rem,8vw,2.6rem);font-weight:800;line-height:1.25;word-break:break-word}
+.card-th .en{font-size:1.05rem;font-weight:600}
+.card-th .ad{font-size:1rem;background:var(--yellow-soft);border-radius:12px;padding:8px;word-break:break-word}
+.card-th .hint{font-size:.78rem;color:var(--muted)}
+.card-th .acts{justify-content:center}
+/* info tab */
+.grid2{display:grid;gap:8px}
+.bk{display:grid;grid-template-columns:62px 1fr auto;gap:8px;align-items:start;padding:8px 4px;border-bottom:2px dotted var(--line);font-size:.86rem}
+.bk:last-child{border-bottom:0}
+.bk .d{font-family:var(--f-num);font-size:.8rem}
+.bk .n{min-width:0}
+.ph{display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:center;padding:7px 4px;border-bottom:2px dotted var(--line);text-align:left;background:none;border-left:0;border-right:0;border-top:0;width:100%}
+.ph .zh{font-weight:600;font-size:.88rem}
+.ph .th{font-size:1.05rem}
+.ph .rd{font-size:.72rem;color:var(--muted);grid-column:1/-1}
+.sos{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;font-size:.88rem}
+.sos b{font-family:var(--f-num);font-size:1.05rem;user-select:all}
+.fx{display:grid;gap:8px}
+.fx .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fx input{font:inherit;font-size:1.1rem;width:7.5em;border:2px solid var(--ink);border-radius:12px;padding:4px 10px;background:var(--paper);font-family:var(--f-num)}
+.fx .out{font-family:var(--f-num);font-size:1.3rem;font-weight:600}
+.fx small{color:var(--muted);font-size:.72rem}
+.htl{display:grid;gap:6px}
+.htl input{font:inherit;border:2px solid var(--ink);border-radius:10px;padding:4px 8px;background:var(--paper);width:100%}
+.tiplist{margin:0;padding-left:18px;font-size:.86rem;display:grid;gap:3px}
 .nextstop{margin-top:8px;background:var(--mint-soft);border:2px dashed var(--ink);border-radius:12px;padding:3px 10px;font-size:.82rem}
 .nextstop b{font-family:var(--f-num)}
 .ctrl{display:flex;align-items:center;gap:10px;margin-top:10px}
@@ -164,6 +213,7 @@ footer{text-align:center;font-size:.72rem;color:var(--muted)}
     </div>
   </header>
 
+  <div id="todayBox"></div>
   <nav class="tabs" id="tabs" role="tablist"></nav>
   <main id="main" style="display:grid;gap:14px"></main>
 
@@ -202,6 +252,7 @@ const P={
   breakfast:{x:156,y:208,n:"Breakfast Story",ic:"🥞"},
   golden:{x:226,y:146,n:"GOLDEN HOUR",ic:"🧋"},
   ekkamai:{x:238,y:182,n:"Ekkamai",ic:"🦀"},
+  somsak:{x:46,y:196,n:"Somsak 螃蟹煲",ic:"🦀",km:"河對岸"},
   wwg:{x:262,y:166,n:"White Wood Green",ic:"💆"},
   bigc:{x:252,y:200,n:"Big C",ic:"🛒"},
   johnny:{x:226,y:224,n:"JOHNNY",ic:"🍢"},
@@ -210,6 +261,29 @@ const P={
   s24:{x:166,y:226,n:"Makkha・素坤逸24",ic:"💆"},
   market:{x:30,y:246,n:"水上・鐵道市場",ic:"🚤",km:"約 100 km"}
 };
+
+// Thai name / address for drivers. hrs = opening hours found online (check again)
+const TH={
+  airport:{th:"สนามบินสุวรรณภูมิ",en:"Suvarnabhumi Airport (BKK)",ad:"ขาออก ชั้น 4 (Departures, 4F)"},
+  saveone:{th:"ตลาดเซฟวันโก สายไหม",en:"Save One Go Market (Sai Mai)",ad:"28/97 Phaholyotin 54 Rd, Sai Mai, Bangkok 10220",hrs:"16:00–22:00（部分攤到午夜）"},
+  safari:{th:"ซาฟารีเวิลด์",en:"Safari World Bangkok",ad:"Panya Intra Rd, Khlong Sam Wa, Bangkok"},
+  chatuchak:{th:"ตลาดนัดจตุจักร",en:"Chatuchak Weekend Market",ad:"BTS Mo Chit / MRT Chatuchak Park"},
+  victory:{th:"อนุสาวรีย์ชัยสมรภูมิ (ก๋วยเตี๋ยวเรือ)",en:"Victory Monument (boat noodles)",ad:"BTS Victory Monument"},
+  central:{th:"เซ็นทรัลเวิลด์",en:"CentralWorld",ad:"ถนนราชดำริ / Ratchadamri Rd"},
+  bhawa:{th:"BHAWA SPA on the eight",en:"BHAWA SPA on the eight",ad:"34/1 ซอยสุขุมวิท 8 (Soi Sukhumvit 8), BTS Nana",hrs:"11:00–21:00"},
+  breakfast:{th:"Breakfast Story Eleven",en:"Breakfast Story Eleven",ad:"23/2 Sukhumvit Rd, Khlong Tan Nuea, Watthana",hrs:"07:00–23:00"},
+  golden:{th:"GOLDEN HOUR BKK",en:"GOLDEN HOUR BKK",ad:""},
+  somsak:{th:"สมศักดิ์ปูอบ (เจริญรัถ)",en:"Somsak Pu Ob (Charoen Rat)",ad:"199-205 ซ.เจริญรัถ 1 แขวงคลองสาน เขตคลองสาน กรุงเทพฯ 10600",hrs:"週二～日 16:00–21:30，週一休"},
+  wwg:{th:"White Wood Green Spa & Wellness",en:"White Wood Green (Ekkamai 12)",ad:"53 ซอยทองหล่อ 10 (เอกมัย 12) แขวงคลองตันเหนือ เขตวัฒนา",hrs:"10:00–21:00"},
+  market:{th:"ตลาดน้ำดำเนินสะดวก / ตลาดร่มหุบ แม่กลอง",en:"Damnoen Saduak Floating Market / Maeklong Railway Market",ad:"跟 KKday 車，不用自己叫車"},
+  bigc:{th:"บิ๊กซี เอกมัย",en:"Big C Ekkamai",ad:"Sukhumvit Rd (near BTS Ekkamai)"},
+  johnny:{th:"JOHNNY MARKET",en:"JOHNNY MARKET",ad:""},
+  infinity:{th:"Infinity Wellbeing",en:"Infinity Wellbeing",ad:"22 ซอยสุขุมวิท 20 (Soi Sukhumvit 20)",hrs:"09:30–21:30"},
+  frans:{th:"Fran's สุขุมวิท 49",en:"Fran's Brunch & Greens (Sukhumvit 49)",ad:"ซอยสุขุมวิท 49 (Soi Sukhumvit 49)",hrs:"08:00–22:00"},
+  s24:{th:"Makkha Health & Spa สุขุมวิท 24",en:"Makkha Health & Spa (Sukhumvit 24)",ad:"43/1 ซอยสุขุมวิท 24 (Soi Sukhumvit 24)"}
+};
+// day load: 1-3 dots + reason
+const LOAD={d1:[2,"落地後還去夜市，晚上偏累"],d2:[3,"09:00–22:30 一整天走很多路"],d3:[3,"Safari 一整天，再跨河去吞武里"],d4:[3,"早出晚歸，來回約 200 km"],d5:[2,"14:30 一定要出發去機場"]};
 
 // ===== itinerary =====
 // k: go/fly/eat/spa/see  s: ok/tbd  p: place (for go/fly = destination)  tw: time shown in Taiwan time
@@ -243,14 +317,14 @@ const DAYS=[
    {t:"22:30",ttl:"返回飯店",k:"go",p:"hotel"},
    {t:"23:15",ttl:"休息",k:"go"}],
   go:"BTS 到洽圖洽；之後轉 MRT。",tbd:"BHAWA SPA 21:00 時段。",alt:"Big C／勝利紀念碑船麵。"},
- {id:"d3",date:"11/1",wd:"日",ic:"🦒",title:"Day 3：Safari World 動物園",route:"飯店 → Safari World → Ekkamai",
+ {id:"d3",date:"11/1",wd:"日",ic:"🦒",title:"Day 3：Safari World 動物園",route:"飯店 → Safari World → Somsak（吞武里）→ Ekkamai 按摩",
   items:[
    {t:"08:00",ttl:"集合出發",note:"KKday 時段為占位",k:"go",p:"safari",s:"tbd"},
    {t:"09:00",ttl:"Safari World",k:"see",p:"safari",q:"Safari World Bangkok"},
    {t:"12:00",ttl:"園內午餐（自理）",k:"eat",p:"safari"},
    {t:"13:00",ttl:"Safari World 下午場",k:"see",p:"safari"},
-   {t:"16:00",ttl:"KKday 回市區",note:"週日傍晚易塞車",k:"go",p:"ekkamai"},
-   {t:"17:00",ttl:"Somsak 螃蟹粉絲煲",k:"eat",p:"ekkamai",q:"Somsak Pu Ob Bangkok"},
+   {t:"16:00",ttl:"KKday 回市區",note:"週日傍晚易塞車",k:"go",p:"somsak"},
+   {t:"17:00",ttl:"Somsak 螃蟹粉絲煲",note:"在河對岸吞武里（Charoen Rat 店），週一公休",k:"eat",p:"somsak",q:"Somsak Pu Ob Charoen Rat"},
    {t:"20:00",ttl:"White Wood Green Ekkamai 按摩",k:"spa",p:"wwg",s:"tbd",q:"White Wood Green Ekkamai"},
    {t:"22:00",ttl:"返回飯店",k:"go",p:"hotel"},
    {t:"23:00",ttl:"休息",k:"go"}],
@@ -449,12 +523,13 @@ function render(id,keepTime){
   curTab=id;setPlay(false);
   document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.id===id));
   const main=$("#main");
+  if(id==="info"){st.day=null;st.live=false;main.innerHTML=infoHTML();bindInfo();return;}
   if(id==="all"){st.day=null;st.live=false;
     main.innerHTML=`
     <div class="box dayhead" style="display:block"><div class="band"></div><div style="display:flex;gap:12px;align-items:flex-start"><img class="face" src="${FACES.ele}" alt=""><div><h2>曼谷五日小旅行總覽</h2><p>10/30 – 11/3・BTS、Grab、KKday 一起移動</p><span class="tagline">點上面的日期看每天路線 🐾</span></div></div></div>
     <div class="box mapbox">${allMap()}<div class="player"><div class="crew">今日同行夥伴：${crewChips()}</div><p class="mapnote">✦ 地圖為手帳示意插畫，比例非實際距離；遠的地方標實際公里數。</p></div></div>
     ${editor()}
-    <div class="box sec"><h2>📅 每天在做什麼</h2><div class="days">${DAYS.map(d=>`<button type="button" class="dcard" data-go="${d.id}" style="--dc:${d.dc}"><span class="dt">${d.date}</span><span><b>${d.ic} ${esc(d.title.replace(/^Day \d：/,""))}</b>${esc(d.route)}<span class="wxs" data-d="${d.date}"></span></span></button>`).join("")}</div></div>
+    <div class="box sec"><h2>📅 每天在做什麼</h2><div class="days">${DAYS.map(d=>`<button type="button" class="dcard" data-go="${d.id}" style="--dc:${d.dc}"><span class="dt">${d.date}</span><span><b>${d.ic} ${esc(d.title.replace(/^Day \d：/,""))}${dots(LOAD[d.id][0])}</b>${esc(d.route)}<span class="wxs" data-d="${d.date}"></span></span></button>`).join("")}</div></div>
     <div class="box sec"><h2>💡 出發前提醒</h2><div class="tips">
       <div class="tip"><b>TDAC 泰國數位入境卡一定要填</b>入境必填、免費，抵達前 3 天內可填（10/27 起）。只用官網 <a href="https://tdac.immigration.go.th" target="_blank" rel="noopener">tdac.immigration.go.th</a>，有收費的假網站。</div>
       <div class="tip"><b>10/30 Save One Go 偏遠</b>在城北賽邁區。17:35 落地，到飯店常已過 20:00，累了就改 JOHNNY MARKET。</div>
@@ -469,7 +544,7 @@ function render(id,keepTime){
   const day=DAYS.find(d=>d.id===id);st.day=day;
   main.innerHTML=`
    <div class="box dayhead" style="--dc:${day.dc};display:block"><div class="band"></div><div style="display:flex;gap:12px;align-items:flex-start"><img class="face" src="${crew.find(c=>c.on)?.img||FACES.ele}" alt=""><div>
-     <h2>${esc(day.title)}</h2><p>2026/${esc(day.date)}（${esc(day.wd)}）・${esc(day.route)}</p>
+     <h2>${esc(day.title)}</h2><p>2026/${esc(day.date)}（${esc(day.wd)}）・${esc(day.route)}</p><div class="dens">體力指數${dots(LOAD[day.id][0])}　${esc(LOAD[day.id][1])}</div>
      <span class="tagline">${day.items.filter(i=>i.s==="tbd").length} 項待確認</span><span class="luck"><i></i>泰國週${esc(day.wd)}幸運色：${day.luck}</span><div class="wx" id="wx" data-d="${day.date}"></div></div></div></div>
    <div class="box mapbox">${dayMap(day)}
      <div class="player">
@@ -483,9 +558,9 @@ function render(id,keepTime){
        <p class="mapnote">✦ 按「現在」會照手機的泰國時間移動；地圖是示意插畫，比例非實際距離。</p>
      </div></div>
    ${editor()}
-   <div class="box tl"><ol>${day.items.map(it=>`<li class="it"><div class="t">${esc(it.t)}${it.tw?"<small>台灣時間</small>":""}</div><div class="b">
+   <div class="box tl"><ol>${day.items.map((it,ix)=>`<li class="it"><div class="t">${esc(it.t)}${it.tw?"<small>台灣時間</small>":""}</div><div class="b">
       <div class="ttl">${esc(it.ttl)}</div>${it.note?`<div class="note">${esc(it.note)}</div>`:""}
-      <div class="tags"><span class="tg k-${it.k}">${KIND[it.k]}</span>${it.s?`<span class="tg ${it.s}">${it.s==="ok"?"已訂":"待確認"}</span>`:""}${it.q?`<a class="gm" href="${gmap(it.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>`:""}</div></div></li>`).join("")}</ol></div>
+      <div class="tags"><span class="tg k-${it.k}">${KIND[it.k]}</span>${it.s?`<span class="tg ${it.s}">${it.s==="ok"?"已訂":"待確認"}</span>`:""}${durTag(day,ix)}${it.q?`<a class="gm" href="${gmap(it.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>`:""}${it.p&&(TH[it.p]||it.p==="hotel")&&it.k!=="fly"?`<button type="button" class="drv" data-th="${it.p}">🚕 給司機看</button>`:""}</div>${warnFor(day,it)}</div></li>`).join("")}</ol></div>
    <div class="notes"><div class="box note-card"><h3>🚕 交通</h3><p>${esc(day.go)}</p></div>
      <div class="box note-card tbd"><h3>⏳ 待確認</h3><p>${esc(day.tbd)}</p></div>
      <div class="box note-card"><h3>🔁 備選</h3><p>${esc(day.alt)}</p></div></div>`;
@@ -532,12 +607,129 @@ function fillWx(){
 
 // ===== tabs =====
 $("#tabs").innerHTML=`<button class="tab" role="tab" type="button" data-id="all" style="--dc:#ffe08a"><span class="ic">🗺️</span><b>總覽</b><small>五天地圖</small></button>`+
-  DAYS.map(d=>`<button class="tab" role="tab" type="button" data-id="${d.id}" style="--dc:${d.dc}"><span class="ic">${d.ic}</span><b>${d.date}（${d.wd}）</b><small>${esc(d.title.replace(/^Day \d：/,"").split("、")[0])}</small></button>`).join("");
-function go(id){try{history.replaceState(null,"","#"+id)}catch(e){}render(id);const t=document.querySelector(`.tab[data-id="${id}"]`);t&&t.scrollIntoView({inline:"center",block:"nearest"});window.scrollTo({top:0});}
+  DAYS.map(d=>`<button class="tab" role="tab" type="button" data-id="${d.id}" style="--dc:${d.dc}"><span class="ic">${d.ic}</span><b>${d.date}（${d.wd}）</b><small>${esc(d.title.replace(/^Day \d：/,"").split("、")[0])}</small></button>`).join("")+
+  `<button class="tab" role="tab" type="button" data-id="info" style="--dc:#b5e6cf"><span class="ic">🧳</span><b>實用</b><small>泰語・換算・緊急</small></button>`;
+function go(id){try{history.replaceState(null,"","#"+id)}catch(e){}render(id);renderToday();const t=document.querySelector(`.tab[data-id="${id}"]`);t&&t.scrollIntoView({inline:"center",block:"nearest"});window.scrollTo({top:0});}
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b)go(b.dataset.id)});
 
+// ===== helpers for new features =====
+const dots=n=>`<span class="energy" aria-label="體力 ${n}/3">${[1,2,3].map(i=>`<i class="${i<=n?"on":""}"></i>`).join("")}</span>`;
+function durTag(day,ix){const it=day.items[ix],nx=day.items[ix+1];if(!nx||it.k==="go"||it.k==="fly")return"";
+  const m=nx.m-it.m;if(m<=0)return"";const h=Math.floor(m/60),mm=m%60;return `<span class="dur">停留 ${h?h+" 小時":""}${mm?mm+" 分":""}</span>`;}
+// check booking time vs opening hours found online
+function warnFor(day,it){
+  if(it.p==="bhawa")return `<div class="warn">⚠️ 網路查到 BHAWA 營業到 21:00，21:00 開始 90 分可能排不到，請跟店家確認。</div>`;
+  if(it.p==="wwg")return `<div class="warn">⚠️ 網路查到營業到 21:00，20:00 開始的話，按摩時間要確認。</div>`;
+  if(it.p==="infinity")return `<div class="warn">⚠️ 網路查到營業到 21:30，21:00 開始只剩 30 分鐘，建議提早預約。</div>`;
+  if(it.p==="saveone"&&it.k==="go")return `<div class="warn">⚠️ 夜市約 22:00 收攤（部分到午夜），在城北靠廊曼機場，車程久。</div>`;
+  if(it.p==="somsak"&&it.k==="eat")return `<div class="warn">⚠️ 在河對岸，跟 Ekkamai 按摩店距離遠，Grab 要抓 40 分鐘以上。</div>`;
+  return "";
+}
+function hotelInfo(){const h=store.get("bkk-hotel")||{};return {th:h.name||"（請到「實用」填飯店名稱）",en:h.en||"",ad:h.addr||""};}
+function placeTH(k){if(k==="hotel"){const h=hotelInfo();return {th:h.th,en:h.en,ad:h.ad,q:h.en||h.th};}const t=TH[k];return t?{...t,q:t.en}:null;}
+function modal(html){closeModal();const m=document.createElement("div");m.className="modal";m.id="modal";m.innerHTML=html;
+  m.addEventListener("click",e=>{if(e.target===m||e.target.closest("[data-close]"))closeModal();});document.body.appendChild(m);m.querySelector("[data-close]")?.focus();}
+function closeModal(){document.getElementById("modal")?.remove();}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+function copyText(t,btn){const done=()=>{btn.textContent="已複製 ✓";};
+  try{navigator.clipboard.writeText(t).then(done,()=>{sel(btn)});}catch(e){sel(btn);}}
+function sel(btn){const el=btn.closest(".card-th")?.querySelector(".ad");if(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent="已選取，請長按複製";}}
+const navURL=q=>"https://www.google.com/maps/dir/?api=1&travelmode=transit&destination="+encodeURIComponent(q);
+function showTH(k){const t=placeTH(k);if(!t)return;
+  modal(`<div class="card-th" role="dialog" aria-label="給司機看的地址">
+   <div class="hint" lang="th">กรุณาไปที่นี่ค่ะ / ครับ（請載我到這裡）</div>
+   <div class="big" lang="th">${esc(t.th)}</div>${t.en&&t.en!==t.th?`<div class="en">${esc(t.en)}</div>`:""}
+   ${t.ad?`<div class="ad">${esc(t.ad)}</div>`:""}${t.hrs?`<div class="hint">營業時間（網路資料）：${esc(t.hrs)}</div>`:""}
+   <div class="acts"><a class="abtn pri" href="${navURL(t.q)}" target="_blank" rel="noopener">🧭 導航</a>
+   ${t.ad?`<button type="button" class="abtn" id="cpy">📋 複製地址</button>`:""}<button type="button" class="abtn" data-close>關閉</button></div>
+   <div class="hint">手機橫放、亮度調高，給司機看最清楚</div></div>`);
+  const c=document.getElementById("cpy");if(c)c.onclick=()=>copyText(t.th+"\n"+t.ad,c);}
+
+// ===== today card (shows during the trip, and the day before) =====
+function renderToday(){
+  const box=$("#todayBox");if(!box)return;
+  const td=DAYS.find(d=>d.date===thDate());
+  const twDate=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Taipei",month:"numeric",day:"numeric"}).format(new Date());
+  let day=td,pre=false;
+  if(!day&&twDate==="10/29"){day=DAYS[0];pre=true;}
+  if(!day){box.innerHTML="";return;}
+  const[h,mm]=tzNow("Asia/Bangkok").split(":").map(Number);let m=pre?0:h*60+mm;if(!pre&&m<300)m+=1440;
+  const ci=pre?-1:curItem(day,m);const cur=ci>=0&&m>=day.items[0].m?day.items[ci]:null;
+  const nx=day.items.slice(Math.max(ci,0)+(cur?1:0)).find(x=>x.p)||null;
+  const lastM=day.items[day.items.length-1].m;
+  box.innerHTML=`<div class="box today"><div class="hd">${pre?"🧳 明天出發":"📍 今天 "+esc(day.date)+"（"+esc(day.wd)+"）"}<small>${pre?"Day 1 的第一站":"照手機泰國時間"}</small></div>
+   <div class="row">${cur&&m<=lastM?`<span class="lab">現在</span><span>${esc(cur.ttl)}</span>`:""}
+   ${nx&&(!cur||m<lastM)?`<span class="lab">下一站</span><span><b>${esc(nx.t)}</b> ${P[nx.p]?P[nx.p].ic:""} ${esc(nx.ttl)}</span>`:`<span class="lab">　</span><span>今天行程結束，好好休息 🌙</span>`}</div>
+   ${nx&&(!cur||m<lastM)&&nx.p!=="khh"?`<div class="acts"><a class="abtn pri" href="${navURL((placeTH(nx.p)||{}).q||nx.q||nx.ttl)}" target="_blank" rel="noopener">🧭 導航過去</a>${placeTH(nx.p)?`<button type="button" class="abtn" data-th="${nx.p}">🚕 給司機看</button>`:""}<button type="button" class="abtn" data-go2="${day.id}">看今天路線</button></div>`:""}</div>`;
+  box.querySelector("[data-go2]")?.addEventListener("click",ev=>go(ev.target.dataset.go2));
+}
+
+// ===== info tab =====
+const PHRASES=[
+ ["你好","สวัสดีค่ะ / ครับ","sa-wat-dee ka / krap（女生說 ka，男生說 krap）"],
+ ["謝謝","ขอบคุณค่ะ / ครับ","kob-kun ka / krap"],
+ ["多少錢？","เท่าไหร่คะ / ครับ","tao-rai ka / krap"],
+ ["可以便宜一點嗎？","ลดได้ไหมคะ / ครับ","lot dai mai"],
+ ["不要辣","ไม่เผ็ด","mai pet"],
+ ["小辣","เผ็ดน้อย","pet noi"],
+ ["少甜","หวานน้อย","wan noi"],
+ ["去冰","ไม่ใส่น้ำแข็ง","mai sai nam-kaeng"],
+ ["買單","เช็คบิลด้วยค่ะ / ครับ","check bin duay"],
+ ["廁所在哪裡？","ห้องน้ำอยู่ที่ไหน","hong-nam yoo tee-nai"],
+ ["按摩輕一點","เบาๆ หน่อยค่ะ / ครับ","bao bao noi"],
+ ["按摩大力一點","แรงๆ หน่อยค่ะ / ครับ","raeng raeng noi"],
+ ["會痛","เจ็บ","jep"],
+ ["請到這個地址","ไปที่นี่ค่ะ / ครับ","pai tee-nee"],
+ ["請到素萬那普機場","ไปสนามบินสุวรรณภูมิ","pai sa-nam-bin su-wan-na-poom"]
+];
+function showSay(i){const p=PHRASES[i];modal(`<div class="card-th" role="dialog"><div class="hint">${esc(p[0])}</div><div class="big" lang="th">${esc(p[1])}</div><div class="hint">${esc(p[2])}</div><div class="acts"><button type="button" class="abtn" data-close>關閉</button></div></div>`);}
+const RATE_FALLBACK=0.966; // 1 THB = ? TWD (Oct 2026)
+let RATE=RATE_FALLBACK,RATE_SRC="2026/10 參考匯率";
+async function loadRate(){const c=store.get("bkk-rate");if(c&&Date.now()-c.at<6*3600e3){RATE=c.r;RATE_SRC=c.src;return;}
+  try{const r=await fetch("https://open.er-api.com/v6/latest/THB");const j=await r.json();if(j&&j.rates&&j.rates.TWD){RATE=j.rates.TWD;RATE_SRC="即時匯率・"+new Date().toLocaleDateString("zh-TW");store.set("bkk-rate",{at:Date.now(),r:RATE,src:RATE_SRC});}}catch(e){}}
+function infoHTML(){
+  const bookings=[];DAYS.forEach(d=>d.items.forEach(it=>{if(it.s)bookings.push({d,it});}));
+  const h=store.get("bkk-hotel")||{};
+  return `
+  <div class="box sec"><h2>🏨 我們的飯店</h2><div class="htl">
+    <input type="text" id="hName" placeholder="飯店泰文或英文名稱" value="${esc(h.name||"")}" aria-label="飯店名稱">
+    <input type="text" id="hEn" placeholder="英文名稱（導航用）" value="${esc(h.en||"")}" aria-label="英文名稱">
+    <input type="text" id="hAddr" placeholder="地址（訂房確認信上有）" value="${esc(h.addr||"")}" aria-label="地址">
+    <div class="acts"><button type="button" class="abtn pri" id="hSave">儲存</button><button type="button" class="abtn" data-th="hotel">🚕 給司機看</button></div>
+    <small style="color:var(--muted);font-size:.72rem">只存在這支手機。房號、訂房代號不要填。</small></div></div>
+
+  <div class="box sec"><h2>📋 預約總表</h2>${bookings.map(({d,it})=>{const t=it.p&&TH[it.p];return `<div class="bk"><span class="d">${esc(d.date)}<br>${esc(it.t)}</span><span class="n"><b>${esc(it.ttl)}</b>${it.note?`<br><span style="color:var(--muted);font-size:.78rem">${esc(it.note)}</span>`:""}${t&&t.hrs?`<br><span style="color:var(--muted);font-size:.75rem">營業 ${esc(t.hrs)}</span>`:""}${warnFor(d,it)}</span><span class="tg ${it.s}">${it.s==="ok"?"已訂":"待確認"}</span></div>`}).join("")}</div>
+
+  <div class="box sec"><h2>💱 泰銖換算</h2><div class="fx">
+    <div class="row"><input type="number" inputmode="decimal" id="fxIn" value="100" min="0" aria-label="泰銖"> <span>泰銖 ＝</span> <span class="out" id="fxOut"></span></div>
+    <div class="acts">${[20,100,300,500,1000].map(v=>`<button type="button" class="abtn" data-fx="${v}">฿${v}</button>`).join("")}</div>
+    <small id="fxSrc"></small></div></div>
+
+  <div class="box sec"><h2>🗣️ 簡單泰語</h2><p style="margin:0 0 6px;font-size:.78rem;color:var(--muted)">點一句會放大，直接給對方看。</p>
+    ${PHRASES.map((p,i)=>`<button type="button" class="ph" data-say="${i}"><span class="zh">${esc(p[0])}</span><span class="th" lang="th">${esc(p[1])}</span><span class="rd">${esc(p[2])}</span></button>`).join("")}</div>
+
+  <div class="box sec"><h2>💆 小費參考</h2><ul class="tiplist">
+    <li>按摩：每小時約 ฿50–100，滿意再給</li><li>高級 SPA 或長療程：約 ฿100–200，或價格的 10–15%</li>
+    <li>餐廳：帳單有 10% 服務費就不用再給，沒有的話留零錢</li><li>飯店行李員：每件約 ฿20–50</li><li>Grab／計程車：不用給，可以湊整數</li></ul>
+    <p style="margin:6px 0 0;font-size:.72rem;color:var(--muted)">泰國沒有強制小費，以上是常見做法。</p></div>
+
+  <div class="box sec"><h2>🆘 緊急聯絡</h2><div class="sos">
+    <span>觀光警察（可說英文）</span><b>1155</b><span>救護車</span><b>1669</b><span>警察</span><b>191</b>
+    <span>駐泰國台北經濟文化辦事處</span><b>02-119-3555</b>
+    <span>辦事處急難救助（真的緊急才打）</span><b>081-666-4006</b>
+    <span>外交部旅外急難專線（從國外打）</span><b>+886-800-085-095</b></div>
+    <p style="margin:8px 0 0;font-size:.72rem;color:var(--muted)">辦事處地址：40/64 Vibhavadi-Rangsit 66, Laksi, Bangkok 10210</p></div>`;
+}
+function bindInfo(){
+  const out=$("#fxOut"),inp=$("#fxIn");
+  const calc=()=>{const v=parseFloat(inp.value)||0;out.textContent="NT$ "+(v*RATE).toLocaleString("zh-TW",{maximumFractionDigits:0});$("#fxSrc").textContent=`1 泰銖 ≈ ${RATE.toFixed(3)} 台幣（${RATE_SRC}）・刷卡另有手續費`;};
+  inp.oninput=calc;document.querySelectorAll("[data-fx]").forEach(b=>b.onclick=()=>{inp.value=b.dataset.fx;calc();});
+  calc();loadRate().then(calc);
+  $("#hSave").onclick=()=>{store.set("bkk-hotel",{name:$("#hName").value.trim(),en:$("#hEn").value.trim(),addr:$("#hAddr").value.trim()});$("#hSave").textContent="已儲存 ✓";renderToday();};
+}
+
 // ===== todo =====
-const TODO=["填 TDAC 泰國數位入境卡（10/27 起，官網免費）","預約 10/30 BKK 機場 → 飯店接送","預約 10/31 BHAWA SPA 21:00（90 分）","預約 11/1 White Wood Green Ekkamai（留塞車緩衝）","預約 11/2 Infinity Wellbeing 21:00","預約 11/3 Makkha Sukhumvit 24 11:00（90 分）","確認 KKday 兩天的集合點、時間、回程下車點","預約 11/3 飯店 → BKK 接送（14:30 出發）","確認飯店 11/3 退房後可寄放行李","手機裝好 Grab、換好泰銖現金"];
+const TODO=["填 TDAC 泰國數位入境卡（10/27 起，官網免費）","預約 10/30 BKK 機場 → 飯店接送","預約 10/31 BHAWA SPA 21:00（90 分）","預約 11/1 White Wood Green Ekkamai（留塞車緩衝）","預約 11/2 Infinity Wellbeing 21:00","預約 11/3 Makkha Sukhumvit 24 11:00（90 分）","確認 KKday 兩天的集合點、時間、回程下車點","預約 11/3 飯店 → BKK 接送（14:30 出發）","確認飯店 11/3 退房後可寄放行李","手機裝好 Grab、換好泰銖現金","到「實用」填飯店名稱和地址","把網頁加到手機主畫面（沒網路也能看）"];
 function renderTodo(){const done=store.get("bkk-todo")||{};const ul=$("#todo");
   ul.innerHTML=TODO.map((t,i)=>`<li><label for="td${i}"><input type="checkbox" id="td${i}" ${done[i]?"checked":""}><span>${esc(t)}</span></label></li>`).join("");
   ul.onchange=e=>{done[e.target.id.slice(2)]=e.target.checked;store.set("bkk-todo",done);};}
@@ -549,6 +741,11 @@ function renderTodo(){const done=store.get("bkk-todo")||{};const ul=$("#todo");
 loadWx();
 // ===== start: hash > today's trip day > overview =====
 (function(){const h=location.hash.slice(1);const td=DAYS.find(d=>d.date===thDate());
-  go(h==="all"||DAYS.some(d=>d.id===h)?h:(td?td.id:"all"));})();
+  go(h==="all"||h==="info"||DAYS.some(d=>d.id===h)?h:(td?td.id:"all"));})();
+setInterval(renderToday,60000);
+document.addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(b){e.preventDefault();showTH(b.dataset.th);}
+  const ph=e.target.closest("[data-say]");if(ph){showSay(+ph.dataset.say);}});
+// offline cache (only on the real website)
+if("serviceWorker" in navigator && location.hostname.endsWith("github.io")){try{navigator.serviceWorker.register("sw.js")}catch(e){}}
 </script>
 </body></html>
