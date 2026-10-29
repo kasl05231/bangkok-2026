@@ -129,6 +129,13 @@ header h1 span{background:linear-gradient(transparent 60%,var(--gold-soft) 60%);
 .htl{display:grid;gap:6px}
 .htl input{font:inherit;border:2px solid var(--ink);border-radius:10px;padding:4px 8px;background:var(--paper);width:100%}
 .tiplist{margin:0;padding-left:18px;font-size:.86rem;display:grid;gap:3px}
+.metro{padding:12px 14px;background:var(--sky-soft)}
+.metro h3{margin:0 0 8px;font-size:1rem}
+.leg{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:center;padding:6px 0;border-bottom:2px dotted var(--line);font-size:.86rem}
+.leg:last-of-type{border-bottom:0}
+.st{display:inline-block;font-family:var(--f-num);font-size:.72rem;font-weight:700;background:#8fd36b;color:#24401a;border:1.5px solid var(--ink);border-radius:8px;padding:0 6px;margin-right:2px}
+.leg small{grid-column:2;color:var(--muted);font-size:.74rem}
+.metro ul{margin:8px 0 0;padding-left:18px;font-size:.82rem;display:grid;gap:2px}
 .nextstop{margin-top:8px;background:var(--mint-soft);border:2px dashed var(--ink);border-radius:12px;padding:3px 10px;font-size:.82rem}
 .nextstop b{font-family:var(--f-num)}
 .ctrl{display:flex;align-items:center;gap:10px;margin-top:10px}
@@ -310,13 +317,13 @@ const DAYS=[
    {t:"09:00",ttl:"飯店出發",k:"go",p:"breakfast"},
    {t:"10:00",ttl:"Breakfast Story Eleven 早午餐",k:"eat",p:"breakfast",q:"Breakfast Story Bangkok"},
    {t:"11:00",ttl:"洽圖洽週末市集",note:"BTS 到 Mo Chit",k:"see",p:"chatuchak",q:"Chatuchak Weekend Market"},
-   {t:"13:00",ttl:"勝利紀念碑吃船麵",note:"BTS Mo Chit → Victory Monument",k:"eat",p:"victory",q:"Victory Monument boat noodles"},
+   {t:"13:00",ttl:"勝利紀念碑吃船麵",note:"BTS Mo Chit（N8）→ Victory Monument（N3），坐 4 站",k:"eat",p:"victory",q:"Victory Monument boat noodles"},
    {t:"14:00",ttl:"CentralWorld 逛街",k:"see",p:"central",q:"CentralWorld Bangkok"},
    {t:"18:30",ttl:"NARA Thai Cuisine 晚餐",note:"CentralWorld 7 樓・餐廳門口集合",k:"eat",p:"central",s:"ok",q:"NARA Thai Cuisine CentralWorld"},
    {t:"21:00",ttl:"BHAWA SPA on the eight 90 分",note:"時段待確認",k:"spa",p:"bhawa",s:"tbd",q:"BHAWA SPA on the eight Bangkok"},
    {t:"22:30",ttl:"返回飯店",k:"go",p:"hotel"},
    {t:"23:15",ttl:"休息",k:"go"}],
-  go:"BTS 到洽圖洽；之後轉 MRT。",tbd:"BHAWA SPA 21:00 時段。",alt:"Big C／勝利紀念碑船麵。"},
+  go:"全程 BTS 淺綠線（Sukhumvit Line），不用換 MRT。BHAWA 按完已晚，回飯店叫 Grab。",metro:true,tbd:"BHAWA SPA 21:00 時段。",alt:"Big C／勝利紀念碑船麵。"},
  {id:"d3",date:"11/1",wd:"日",ic:"🦒",title:"Day 3：Safari World 動物園",route:"飯店 → Safari World → Somsak（吞武里）→ Ekkamai 按摩",
   items:[
    {t:"08:00",ttl:"集合出發",note:"KKday 時段為占位",k:"go",p:"safari",s:"tbd"},
@@ -563,7 +570,7 @@ function render(id,keepTime){
       <div class="tags"><span class="tg k-${it.k}">${KIND[it.k]}</span>${it.s?`<span class="tg ${it.s}">${it.s==="ok"?"已訂":"待確認"}</span>`:""}${durTag(day,ix)}${it.q?`<a class="gm" href="${gmap(it.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>`:""}${it.p&&(TH[it.p]||it.p==="hotel")&&it.k!=="fly"?`<button type="button" class="drv" data-th="${it.p}">🚕 給司機看</button>`:""}</div>${warnFor(day,it)}</div></li>`).join("")}</ol></div>
    <div class="notes"><div class="box note-card"><h3>🚕 交通</h3><p>${esc(day.go)}</p></div>
      <div class="box note-card tbd"><h3>⏳ 待確認</h3><p>${esc(day.tbd)}</p></div>
-     <div class="box note-card"><h3>🔁 備選</h3><p>${esc(day.alt)}</p></div></div>`;
+     <div class="box note-card"><h3>🔁 備選</h3><p>${esc(day.alt)}</p></div></div>${day.metro?metroHTML():""}`;
   $("#slider").oninput=e=>{setPlay(false);st.live=false;$("#liveBtn").setAttribute("aria-pressed","false");setTime(+e.target.value,true);};
   $("#playBtn").onclick=()=>setPlay(!st.play);
   $("#spdBtn").onclick=e=>{st.speed=st.speed===1?2:st.speed===2?4:st.speed===4?8:1;e.target.textContent="×"+st.speed;};
@@ -662,6 +669,22 @@ function renderToday(){
    ${nx&&(!cur||m<lastM)?`<span class="lab">下一站</span><span><b>${esc(nx.t)}</b> ${P[nx.p]?P[nx.p].ic:""} ${esc(nx.ttl)}</span>`:`<span class="lab">　</span><span>今天行程結束，好好休息 🌙</span>`}</div>
    ${nx&&(!cur||m<lastM)&&nx.p!=="khh"?`<div class="acts"><a class="abtn pri" href="${navURL((placeTH(nx.p)||{}).q||nx.q||nx.ttl)}" target="_blank" rel="noopener">🧭 導航過去</a>${placeTH(nx.p)?`<button type="button" class="abtn" data-th="${nx.p}">🚕 給司機看</button>`:""}<button type="button" class="abtn" data-go2="${day.id}">看今天路線</button></div>`:""}</div>`;
   box.querySelector("[data-go2]")?.addEventListener("click",ev=>go(ev.target.dataset.go2));
+}
+
+// ===== Day 2 BTS cheat sheet =====
+function metroHTML(){
+  const st=(c,n)=>`<span class="st">${c}</span>${n}`;
+  return `<div class="box metro"><h3>🚝 Day 2 捷運小抄（BTS 淺綠線）</h3>
+   <div class="leg"><span>11:00</span><span>早午餐後 → ${st("N8","Mo Chit")}</span><small>洽圖洽在 Mo Chit 站旁邊</small></div>
+   <div class="leg"><span>13:00</span><span>${st("N8","Mo Chit")} → ${st("N3","Victory Monument")}</span><small>往市區方向坐 4 站，吃船麵</small></div>
+   <div class="leg"><span>14:00</span><span>${st("N3","Victory")} → ${st("E1","Chit Lom")}</span><small>坐 4 站，不用下車（Siam 站直接過），天橋走到 CentralWorld</small></div>
+   <div class="leg"><span>20:30</span><span>${st("E1","Chit Lom")} → ${st("E3","Nana")}</span><small>坐 2 站，走約 5 分鐘到 BHAWA；或直接 Grab</small></div>
+   <div class="leg"><span>22:30</span><span>回飯店</span><small>末班車約 23:30，建議直接叫 Grab</small></div>
+   <ul><li><b>買一日票 ฿150</b>：人工窗口說「One Day Pass」，當天無限搭 BTS。單程每趟 ฿17–62，搭 4 趟以上就划算</li>
+   <li>BTS <b>不能刷信用卡</b>進站，只收現金買票或一日票</li>
+   <li>MRT（藍線）才可以直接刷感應信用卡；今天用不到</li>
+   <li>看月台螢幕上的<b>站號</b>（N8、N3、E1）下車，就不會坐過站</li>
+   <li>16:30–19:30 下班尖峰很擠，逛完 CentralWorld 再出發剛好避開</li></ul></div>`;
 }
 
 // ===== info tab =====
