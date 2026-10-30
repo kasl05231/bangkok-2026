@@ -249,13 +249,13 @@ const DEFAULT_CREW=[
 const P={
   khh:{x:316,y:28,n:"高雄小港",ic:"🏠"},
   airport:{x:316,y:196,n:"BKK 機場",ic:"✈️",km:"市區約 30 km"},
-  hotel:{x:194,y:172,n:"飯店",ic:"🏨"},
+  hotel:{x:194,y:172,n:"彩鴻酒店・素坤逸11",ic:"🏨"},
   saveone:{x:150,y:34,n:"Save One Go",ic:"🏮",km:"約 25 km"},
   safari:{x:262,y:62,n:"Safari World",ic:"🦒",km:"約 25 km"},
   chatuchak:{x:126,y:84,n:"洽圖洽",ic:"🛍️"},
   victory:{x:120,y:122,n:"勝利紀念碑",ic:"🍜"},
   central:{x:134,y:152,n:"CentralWorld",ic:"🛍️"},
-  bhawa:{x:100,y:180,n:"BHAWA SPA",ic:"💆"},
+  bhawa:{x:166,y:150,n:"BHAWA SPA",ic:"💆"},
   breakfast:{x:156,y:208,n:"Breakfast Story",ic:"🥞"},
   golden:{x:226,y:146,n:"GOLDEN HOUR",ic:"🧋"},
   ekkamai:{x:238,y:182,n:"Ekkamai",ic:"🦀"},
@@ -323,7 +323,7 @@ const DAYS=[
    {t:"21:00",ttl:"BHAWA SPA on the eight 90 分",note:"時段待確認",k:"spa",p:"bhawa",s:"tbd",q:"BHAWA SPA on the eight Bangkok"},
    {t:"22:30",ttl:"返回飯店",k:"go",p:"hotel"},
    {t:"23:15",ttl:"休息",k:"go"}],
-  go:"全程 BTS 淺綠線（Sukhumvit Line），不用換 MRT。BHAWA 按完已晚，回飯店叫 Grab。",metro:true,tbd:"BHAWA SPA 21:00 時段。",alt:"Big C／勝利紀念碑船麵。"},
+  go:"全程 BTS 淺綠線（Sukhumvit Line），不用換 MRT。BHAWA 在飯店對面的 Soi 8，按完走路回飯店。",metro:true,tbd:"BHAWA SPA 21:00 時段。",alt:"Big C／勝利紀念碑船麵。"},
  {id:"d3",date:"11/1",wd:"日",ic:"🦒",title:"Day 3：Safari World 動物園",route:"飯店 → Safari World → Somsak（吞武里）→ Ekkamai 按摩",
   items:[
    {t:"08:00",ttl:"集合出發",note:"KKday 時段為占位",k:"go",p:"safari",s:"tbd"},
@@ -632,7 +632,8 @@ function warnFor(day,it){
   if(it.p==="somsak"&&it.k==="eat")return `<div class="warn">⚠️ 在河對岸，跟 Ekkamai 按摩店距離遠，Grab 要抓 40 分鐘以上。</div>`;
   return "";
 }
-function hotelInfo(){const h=store.get("bkk-hotel")||{};return {th:h.name||"（請到「實用」填飯店名稱）",en:h.en||"",ad:h.addr||""};}
+const HOTEL={th:"ทราเวลลอดจ์ สุขุมวิท 11",en:"Travelodge Sukhumvit 11",ad:"30/9-10 ซอยสุขุมวิท 11 (ชัยยศ) แขวงคลองเตยเหนือ เขตวัฒนา กรุงเทพฯ 10110"};
+function hotelInfo(){const h=store.get("bkk-hotel2")||{};return {th:h.name||HOTEL.th,en:h.en||HOTEL.en,ad:h.addr||HOTEL.ad};}
 function placeTH(k){if(k==="hotel"){const h=hotelInfo();return {th:h.th,en:h.en,ad:h.ad,q:h.en||h.th};}const t=TH[k];return t?{...t,q:t.en}:null;}
 function modal(html){closeModal();const m=document.createElement("div");m.className="modal";m.id="modal";m.innerHTML=html;
   m.addEventListener("click",e=>{if(e.target===m||e.target.closest("[data-close]"))closeModal();});document.body.appendChild(m);m.querySelector("[data-close]")?.focus();}
@@ -679,7 +680,7 @@ function metroHTML(){
    <div class="leg"><span>13:00</span><span>${st("N8","Mo Chit")} → ${st("N3","Victory Monument")}</span><small>往市區方向坐 4 站，吃船麵</small></div>
    <div class="leg"><span>14:00</span><span>${st("N3","Victory")} → ${st("E1","Chit Lom")}</span><small>坐 4 站，不用下車（Siam 站直接過），天橋走到 CentralWorld</small></div>
    <div class="leg"><span>20:30</span><span>${st("E1","Chit Lom")} → ${st("E3","Nana")}</span><small>坐 2 站，走約 5 分鐘到 BHAWA；或直接 Grab</small></div>
-   <div class="leg"><span>22:30</span><span>回飯店</span><small>末班車約 23:30，建議直接叫 Grab</small></div>
+   <div class="leg"><span>22:30</span><span>回飯店</span><small>BHAWA 在 Soi 8，過素坤逸大路就是飯店的 Soi 11，走路約 10 分鐘</small></div>
    <ul><li><b>買一日票 ฿150</b>：人工窗口說「One Day Pass」，當天無限搭 BTS。單程每趟 ฿17–62，搭 4 趟以上就划算</li>
    <li>BTS <b>不能刷信用卡</b>進站，只收現金買票或一日票</li>
    <li>MRT（藍線）才可以直接刷感應信用卡；今天用不到</li>
@@ -712,14 +713,15 @@ async function loadRate(){const c=store.get("bkk-rate");if(c&&Date.now()-c.at<6*
   try{const r=await fetch("https://open.er-api.com/v6/latest/THB");const j=await r.json();if(j&&j.rates&&j.rates.TWD){RATE=j.rates.TWD;RATE_SRC="即時匯率・"+new Date().toLocaleDateString("zh-TW");store.set("bkk-rate",{at:Date.now(),r:RATE,src:RATE_SRC});}}catch(e){}}
 function infoHTML(){
   const bookings=[];DAYS.forEach(d=>d.items.forEach(it=>{if(it.s)bookings.push({d,it});}));
-  const h=store.get("bkk-hotel")||{};
+  const h=hotelInfo();
   return `
   <div class="box sec"><h2>🏨 我們的飯店</h2><div class="htl">
-    <input type="text" id="hName" placeholder="飯店泰文或英文名稱" value="${esc(h.name||"")}" aria-label="飯店名稱">
-    <input type="text" id="hEn" placeholder="英文名稱（導航用）" value="${esc(h.en||"")}" aria-label="英文名稱">
-    <input type="text" id="hAddr" placeholder="地址（訂房確認信上有）" value="${esc(h.addr||"")}" aria-label="地址">
+    <div style="font-size:.9rem"><b>曼谷素坤逸 11 巷彩鴻酒店</b>（Travelodge Sukhumvit 11）<br><span style="color:var(--muted);font-size:.8rem">BTS Nana（E3）站走路約 10 分鐘・BHAWA SPA 就在對面的 Soi 8</span></div>
+    <input type="text" id="hName" placeholder="泰文名稱" value="${esc(h.th)}" aria-label="飯店泰文名稱">
+    <input type="text" id="hEn" placeholder="英文名稱（導航用）" value="${esc(h.en)}" aria-label="英文名稱">
+    <input type="text" id="hAddr" placeholder="地址" value="${esc(h.ad)}" aria-label="地址">
     <div class="acts"><button type="button" class="abtn pri" id="hSave">儲存</button><button type="button" class="abtn" data-th="hotel">🚕 給司機看</button></div>
-    <small style="color:var(--muted);font-size:.72rem">只存在這支手機。房號、訂房代號不要填。</small></div></div>
+    <small style="color:var(--muted);font-size:.72rem">已經幫你填好。要改的話改完按儲存（只存在這支手機）。房號、訂房代號不要填。</small></div></div>
 
   <div class="box sec"><h2>📋 預約總表</h2>${bookings.map(({d,it})=>{const t=it.p&&TH[it.p];return `<div class="bk"><span class="d">${esc(d.date)}<br>${esc(it.t)}</span><span class="n"><b>${esc(it.ttl)}</b>${it.note?`<br><span style="color:var(--muted);font-size:.78rem">${esc(it.note)}</span>`:""}${t&&t.hrs?`<br><span style="color:var(--muted);font-size:.75rem">營業 ${esc(t.hrs)}</span>`:""}${warnFor(d,it)}</span><span class="tg ${it.s}">${it.s==="ok"?"已訂":"待確認"}</span></div>`}).join("")}</div>
 
@@ -748,11 +750,11 @@ function bindInfo(){
   const calc=()=>{const v=parseFloat(inp.value)||0;out.textContent="NT$ "+(v*RATE).toLocaleString("zh-TW",{maximumFractionDigits:0});$("#fxSrc").textContent=`1 泰銖 ≈ ${RATE.toFixed(3)} 台幣（${RATE_SRC}）・刷卡另有手續費`;};
   inp.oninput=calc;document.querySelectorAll("[data-fx]").forEach(b=>b.onclick=()=>{inp.value=b.dataset.fx;calc();});
   calc();loadRate().then(calc);
-  $("#hSave").onclick=()=>{store.set("bkk-hotel",{name:$("#hName").value.trim(),en:$("#hEn").value.trim(),addr:$("#hAddr").value.trim()});$("#hSave").textContent="已儲存 ✓";renderToday();};
+  $("#hSave").onclick=()=>{store.set("bkk-hotel2",{name:$("#hName").value.trim(),en:$("#hEn").value.trim(),addr:$("#hAddr").value.trim()});$("#hSave").textContent="已儲存 ✓";renderToday();};
 }
 
 // ===== todo =====
-const TODO=["填 TDAC 泰國數位入境卡（10/27 起，官網免費）","預約 10/30 BKK 機場 → 飯店接送","預約 10/31 BHAWA SPA 21:00（90 分）","預約 11/1 White Wood Green Ekkamai（留塞車緩衝）","預約 11/2 Infinity Wellbeing 21:00","預約 11/3 Makkha Sukhumvit 24 11:00（90 分）","確認 KKday 兩天的集合點、時間、回程下車點","預約 11/3 飯店 → BKK 接送（14:30 出發）","確認飯店 11/3 退房後可寄放行李","手機裝好 Grab、換好泰銖現金","到「實用」填飯店名稱和地址","把網頁加到手機主畫面（沒網路也能看）"];
+const TODO=["填 TDAC 泰國數位入境卡（10/27 起，官網免費）","預約 10/30 BKK 機場 → 飯店接送","預約 10/31 BHAWA SPA 21:00（90 分）","預約 11/1 White Wood Green Ekkamai（留塞車緩衝）","預約 11/2 Infinity Wellbeing 21:00","預約 11/3 Makkha Sukhumvit 24 11:00（90 分）","確認 KKday 兩天的集合點、時間、回程下車點","預約 11/3 飯店 → BKK 接送（14:30 出發）","確認飯店 11/3 退房後可寄放行李","手機裝好 Grab、換好泰銖現金","把網頁加到手機主畫面（沒網路也能看）"];
 function renderTodo(){const done=store.get("bkk-todo")||{};const ul=$("#todo");
   ul.innerHTML=TODO.map((t,i)=>`<li><label for="td${i}"><input type="checkbox" id="td${i}" ${done[i]?"checked":""}><span>${esc(t)}</span></label></li>`).join("");
   ul.onchange=e=>{done[e.target.id.slice(2)]=e.target.checked;store.set("bkk-todo",done);};}
