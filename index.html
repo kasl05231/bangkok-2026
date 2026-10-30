@@ -264,7 +264,7 @@ const P={
   somsak:{x:46,y:196,n:"Somsak 螃蟹煲",ic:"🦀",km:"河對岸"},
   wwg:{x:262,y:166,n:"White Wood Green",ic:"💆"},
   bigc:{x:252,y:200,n:"Big C",ic:"🛒"},
-  johnny:{x:226,y:224,n:"JOHNNY",ic:"🍢"},
+  johnny:{x:258,y:222,n:"JOHNNY MARKET",ic:"🍢"},
   infinity:{x:192,y:240,n:"Infinity",ic:"💆"},
   frans:{x:226,y:206,n:"Fran's",ic:"🥐"},
   s24:{x:166,y:226,n:"Makkha・素坤逸24",ic:"💆"},
@@ -286,7 +286,7 @@ const TH={
   wwg:{th:"White Wood Green Spa & Wellness",en:"White Wood Green Spa & Wellness Ekkamai",ad:"53 ซอยทองหล่อ 10 (เอกมัย 12) แขวงคลองตันเหนือ เขตวัฒนา",hrs:"10:00–21:00"},
   market:{th:"ตลาดน้ำดำเนินสะดวก / ตลาดร่มหุบ แม่กลอง",en:"Damnoen Saduak Floating Market / Maeklong Railway Market",ad:"跟 KKday 車，不用自己叫車"},
   bigc:{th:"บิ๊กซี เอกมัย",en:"Big C Ekkamai",ad:"Sukhumvit Rd (near BTS Ekkamai)"},
-  johnny:{th:"JOHNNY MARKET",en:"JOHNNY MARKET",ad:""},
+  johnny:{th:"Johnny Market เอกมัย (หน้าสถานีขนส่งเอกมัย)",en:"Johnny Market Ekkamai",ad:"928 ถนนสุขุมวิท (หน้าสถานีขนส่งเอกมัย) BTS เอกมัย ทางออก 2",hrs:"每天 11:00–01:00"},
   infinity:{th:"Infinity Wellbeing",en:"Infinity Wellbeing",ad:"22 ซอยสุขุมวิท 20 (Soi Sukhumvit 20)",hrs:"09:30–21:30"},
   frans:{th:"Fran's สุขุมวิท 49",en:"Fran's Brunch & Greens (Sukhumvit 49)",ad:"ซอยสุขุมวิท 49 (Soi Sukhumvit 49)",hrs:"08:00–22:00"},
   s24:{th:"Makkha Health & Spa สุขุมวิท 24",en:"Makkha Health & Spa (Sukhumvit 24)",ad:"43/1 ซอยสุขุมวิท 24 (Soi Sukhumvit 24)"}
@@ -297,7 +297,7 @@ const LOAD={d1:[2,"落地後還去夜市，晚上偏累"],d2:[3,"09:00–22:30 �
 // ===== itinerary =====
 // k: go/fly/eat/spa/see  s: ok/tbd  p: place (for go/fly = destination)  tw: time shown in Taiwan time
 const DAYS=[
- {id:"d1",date:"10/30",wd:"五",ic:"✈️",title:"Day 1：抵達、夜市散步",route:"小港 → BKK → 彩鴻酒店 → 夜市",
+ {id:"d1",date:"10/30",wd:"五",ic:"✈️",title:"Day 1：抵達、JOHNNY MARKET",route:"小港 → BKK → 彩鴻酒店 → JOHNNY MARKET",
   items:[
    {t:"12:00",ttl:"前往小港機場、報到",k:"go",p:"khh"},
    {t:"13:00",ttl:"出境、候機",k:"go"},
@@ -305,14 +305,14 @@ const DAYS=[
    {t:"17:35",ttl:"抵達 BKK",k:"fly",p:"airport"},
    {t:"18:00",ttl:"入境、領行李",k:"go"},
    {t:"19:00",ttl:"搭車到彩鴻酒店、入住放行李",note:"曼谷素坤逸 11 巷彩鴻酒店（Travelodge Sukhumvit 11），四晚都住這",k:"go",p:"hotel",s:"tbd"},
-   {t:"20:00",ttl:"前往 Save One Go 夜市",note:"若入住太晚改 JOHNNY MARKET",k:"go",p:"saveone",q:"Save One Go Market Bangkok"},
-   {t:"21:00",ttl:"夜市晚餐、逛攤",k:"eat",p:"saveone"},
+   {t:"20:00",ttl:"BTS 到 JOHNNY MARKET",note:"Nana（E3）→ Ekkamai（E7）坐 4 站約 10 分鐘，2 號出口",k:"go",p:"johnny",q:"Johnny Market Ekkamai"},
+   {t:"20:30",ttl:"JOHNNY MARKET 晚餐、逛攤",note:"必吃：Jeh O 冬蔭功泡麵、Sawang 蟹鉗麵、Ko Ong 海南雞飯。營業到 01:00，有屋頂不怕雨",k:"eat",p:"johnny",q:"Johnny Market Ekkamai"},
    {t:"22:00",ttl:"GOLDEN HOUR BKK",note:"坐下休息、飲料或點心",k:"eat",p:"golden",q:"GOLDEN HOUR BKK"},
    {t:"23:00",ttl:"回彩鴻酒店",k:"go",p:"hotel"},
    {t:"23:45",ttl:"晚安",k:"go"}],
-  go:"BKK 接送到彩鴻酒店（素坤逸 11 巷）；夜市往返搭 Grab。Save One Go 較遠。",
+  go:"BKK 接送到彩鴻酒店（素坤逸 11 巷）；夜市搭 BTS Nana → Ekkamai，回程 BTS 或 Grab（BTS 末班約 23:30）。",
   tbd:"每天按摩還沒預約。第一晚選住宿區晚營業的店，或 ONE MORE 候補。",
-  alt:"JOHNNY MARKET 可取代 Save One Go。"},
+  alt:"Save One Go 太遠（BTS 約 1 小時）、賽邁區剛淹過水，改為不去。"},
  {id:"d2",date:"10/31",wd:"六",ic:"🛍️",title:"Day 2：洽圖洽、CentralWorld",route:"早午餐 → 洽圖洽 → 船麵 → CentralWorld → SPA",
   items:[
    {t:"08:00",ttl:"準備出門",k:"go",p:"hotel"},
@@ -340,7 +340,7 @@ const DAYS=[
   go:"KKday 接送；Ekkamai 店和 Somsak 之間搭 Grab；回飯店 BTS 或 Grab。",
   tbd:"KKday 集合點、下車點和回程。White Wood Green 可改 Makkha／ONE MORE。",
   alt:"CRENN／eich 只在提早回城時二選一。"},
- {id:"d4",date:"11/2",wd:"一",ic:"🚤",title:"Day 4：水上市場、鐵道市場",route:"丹嫩莎朵 → 美功 → Big C → JOHNNY",
+ {id:"d4",date:"11/2",wd:"一",ic:"🚤",title:"Day 4：水上市場、鐵道市場",route:"丹嫩莎朵 → 美功 → Big C → 晚餐待定",
   items:[
    {t:"08:00",ttl:"集合出發",note:"KKday 集合與接送時間待確認",k:"go",p:"market",s:"tbd"},
    {t:"10:00",ttl:"丹嫩莎朵水上市場",k:"see",p:"market",q:"Damnoen Saduak Floating Market"},
@@ -348,7 +348,7 @@ const DAYS=[
    {t:"13:00",ttl:"美功鐵道市場",note:"火車進站時間固定，跟導遊走",k:"see",p:"market",q:"Maeklong Railway Market"},
    {t:"15:00",ttl:"返回曼谷",k:"go",p:"bigc"},
    {t:"16:30",ttl:"Big C Ekkamai 採買",k:"see",p:"bigc",q:"Big C Ekkamai"},
-   {t:"19:00",ttl:"JOHNNY MARKET 晚餐",k:"eat",p:"johnny",q:"JOHNNY MARKET Bangkok"},
+   {t:"19:00",ttl:"晚餐（待定）",note:"第一天已去 JOHNNY MARKET，這餐再想",k:"eat",p:"johnny",s:"tbd",q:"Johnny Market Ekkamai"},
    {t:"21:00",ttl:"Infinity Wellbeing 按摩",k:"spa",p:"infinity",s:"tbd",q:"Infinity Wellbeing Bangkok"},
    {t:"22:00",ttl:"按摩結束、返回彩鴻酒店",k:"go",p:"hotel"},
    {t:"23:00",ttl:"休息",k:"go"}],
@@ -541,7 +541,7 @@ function render(id,keepTime){
     <div class="box sec"><h2>📅 每天在做什麼</h2><div class="days">${DAYS.map(d=>`<button type="button" class="dcard" data-go="${d.id}" style="--dc:${d.dc}"><span class="dt">${d.date}</span><span><b>${d.ic} ${esc(d.title.replace(/^Day \d：/,""))}${dots(LOAD[d.id][0])}</b>${esc(d.route)}<span class="wxs" data-d="${d.date}"></span></span></button>`).join("")}</div></div>
     <div class="box sec"><h2>💡 出發前提醒</h2><div class="tips">
       <div class="tip"><b>TDAC 泰國數位入境卡一定要填</b>入境必填、免費，抵達前 3 天內可填（10/27 起）。只用官網 <a href="https://tdac.immigration.go.th" target="_blank" rel="noopener">tdac.immigration.go.th</a>，有收費的假網站。</div>
-      <div class="tip"><b>10/30 Save One Go 偏遠</b>在城北賽邁區。17:35 落地，到飯店常已過 20:00，累了就改 JOHNNY MARKET。</div>
+      <div class="tip"><b>10/30 晚上去 JOHNNY MARKET</b>BTS Nana 坐 4 站到 Ekkamai，2 號出口。營業到 01:00，有屋頂。</div>
       <div class="tip"><b>11/1 Safari World 回程會塞</b>週日傍晚回市區容易塞車，按摩預約留 30–60 分鐘緩衝。</div>
       <div class="tip"><b>11/2 美功鐵道市場</b>火車進站時間固定，跟 KKday 導遊時間走。</div>
       <div class="tip"><b>11/3 最緊</b>Makkha 11:00–12:30，14:30 去機場不能延後。</div>
