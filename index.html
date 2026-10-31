@@ -136,6 +136,18 @@ header h1 span{background:linear-gradient(transparent 60%,var(--gold-soft) 60%);
 .st{display:inline-block;font-family:var(--f-num);font-size:.72rem;font-weight:700;background:#8fd36b;color:#24401a;border:1.5px solid var(--ink);border-radius:8px;padding:0 6px;margin-right:2px}
 .leg small{grid-column:2;color:var(--muted);font-size:.74rem}
 .metro ul{margin:8px 0 0;padding-left:18px;font-size:.82rem;display:grid;gap:2px}
+.pic{margin-top:6px;border:2px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--sky-soft);max-width:340px}
+.pic img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;max-width:100%}
+.pic figcaption{font-size:.66rem;color:var(--muted);padding:2px 8px;background:var(--paper)}
+.pic[hidden]{display:none}
+.photo-btn{font-size:.72rem;border:1.5px solid var(--ink);border-radius:999px;padding:0 8px;background:var(--yellow-soft);color:var(--ink);text-decoration:none;font-weight:600}
+.shows{padding:12px 14px;background:var(--pink-soft)}
+.shows h3{margin:0 0 6px;font-size:1rem}
+.shows table{width:100%;border-collapse:collapse;font-size:.86rem}
+.shows td{padding:4px 2px;border-bottom:2px dotted var(--line);vertical-align:top}
+.shows td:first-child{font-family:var(--f-num);white-space:nowrap;width:4.5em}
+.shows .star{font-weight:700}
+.shows ul{margin:8px 0 0;padding-left:18px;font-size:.8rem;display:grid;gap:2px}
 .nextstop{margin-top:8px;background:var(--mint-soft);border:2px dashed var(--ink);border-radius:12px;padding:3px 10px;font-size:.82rem}
 .nextstop b{font-family:var(--f-num)}
 .ctrl{display:flex;align-items:center;gap:10px;margin-top:10px}
@@ -567,17 +579,17 @@ function render(id,keepTime){
        <p class="mapnote">✦ 點地圖上的地點或行程名稱，會開 Google 地圖顯示從你現在位置過去的距離和時間。</p>
      </div></div>
    ${editor()}
-   <div class="box tl"><ol>${day.items.map((it,ix)=>`<li class="it"><div class="t">${esc(it.t)}${it.tw?"<small>台灣時間</small>":""}</div><div class="b">
+   <div class="box tl"><ol>${(()=>{const seenP={};day.items.forEach((it,ix)=>{if(it.p&&it.k!=="fly"&&it.p!=="khh"&&!seenP[it.p]&&(it.k!=="go"||it.p==="hotel"))seenP[it.p]=ix+1;});day._pic=seenP;return "";})()}${day.items.map((it,ix)=>`<li class="it"><div class="t">${esc(it.t)}${it.tw?"<small>台灣時間</small>":""}</div><div class="b">
       <div class="ttl">${it.p&&it.k!=="fly"&&it.p!=="khh"?`<a class="ttl-a" href="${navURL(destOf(it.p,it.q))}" target="_blank" rel="noopener">${esc(it.ttl)} <span aria-hidden="true">📍</span></a>`:esc(it.ttl)}</div>${it.note?`<div class="note">${esc(it.note)}</div>`:""}
-      <div class="tags"><span class="tg k-${it.k}">${KIND[it.k]}</span>${it.s?`<span class="tg ${it.s}">${it.s==="ok"?"已訂":"待確認"}</span>`:""}${durTag(day,ix)}${it.p&&it.k!=="fly"&&it.p!=="khh"?`<a class="gm nav" href="${navURL(destOf(it.p,it.q))}" target="_blank" rel="noopener">🧭 路線・時間</a>`:""}${it.p&&(TH[it.p]||it.p==="hotel")&&it.k!=="fly"?`<button type="button" class="drv" data-th="${it.p}">🚕 給司機看</button>`:""}</div>${warnFor(day,it)}</div></li>`).join("")}</ol></div>
+      <div class="tags"><span class="tg k-${it.k}">${KIND[it.k]}</span>${it.s?`<span class="tg ${it.s}">${it.s==="ok"?"已訂":"待確認"}</span>`:""}${durTag(day,ix)}${it.p&&it.k!=="fly"&&it.p!=="khh"?`<a class="gm nav" href="${navURL(destOf(it.p,it.q))}" target="_blank" rel="noopener">🧭 路線・時間</a>`:""}${it.p&&(TH[it.p]||it.p==="hotel")&&it.k!=="fly"?`<button type="button" class="drv" data-th="${it.p}">🚕 給司機看</button>`:""}</div>${warnFor(day,it)}${day._pic[it.p]===ix+1?picHTML(it.p,it.q):""}</div></li>`).join("")}</ol></div>
    <div class="notes"><div class="box note-card"><h3>🚕 交通</h3><p>${esc(day.go)}</p></div>
      <div class="box note-card tbd"><h3>⏳ 待確認</h3><p>${esc(day.tbd)}</p></div>
-     <div class="box note-card"><h3>🔁 備選</h3><p>${esc(day.alt)}</p></div></div>${day.metro?metroHTML():""}`;
+     <div class="box note-card"><h3>🔁 備選</h3><p>${esc(day.alt)}</p></div></div>${day.metro?metroHTML():""}${day.id==="d3"?showsHTML():""}`;
   $("#slider").oninput=e=>{setPlay(false);st.live=false;$("#liveBtn").setAttribute("aria-pressed","false");setTime(+e.target.value,true);};
   $("#playBtn").onclick=()=>setPlay(!st.play);
   $("#spdBtn").onclick=e=>{st.speed=st.speed===1?2:st.speed===2?4:st.speed===4?8:1;e.target.textContent="×"+st.speed;};
   $("#liveBtn").onclick=()=>{if(st.live){st.live=false;$("#liveBtn").setAttribute("aria-pressed","false");}else goLive();};
-  bindCrew();fillWx();
+  bindCrew();fillWx();loadPics();
   const today=thDate()===day.date.replace(/^0/,"");
   if(keepTime) setTime(st.m);
   else if(today) goLive();
@@ -684,6 +696,35 @@ function renderToday(){
 }
 
 // ===== Day 2 BTS cheat sheet =====
+// ===== photos: Wikipedia lead image (free license), else a Google Maps photo link =====
+const WIKI={airport:"Suvarnabhumi_Airport",chatuchak:"Chatuchak_Weekend_Market",victory:"Victory_Monument_(Bangkok)",central:"CentralWorld",
+  safari:"Safari_World",market:"Damnoen_Saduak_Floating_Market"};
+const EXTRA_PICS={market:"Maeklong_Railway_Market"};
+function picHTML(k,q){
+  const gm=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(destOf(k,q))}`;
+  const titles=[WIKI[k],EXTRA_PICS[k]].filter(Boolean);
+  const imgs=titles.map(t=>`<figure class="pic" data-wiki="${t}" hidden><img alt="${esc(P[k]?P[k].n:"")} 照片" loading="lazy"><figcaption>照片：Wikipedia／Wikimedia Commons</figcaption></figure>`).join("");
+  return `${imgs}<div class="tags" style="margin-top:4px"><a class="photo-btn" href="${gm}" target="_blank" rel="noopener">📷 看更多照片</a></div>`;
+}
+function loadPics(){
+  document.querySelectorAll(".pic[data-wiki]").forEach(async fig=>{
+    const t=fig.dataset.wiki,key="bkk-pic-"+t;let src=null;
+    const c=store.get(key);if(c&&c.src)src=c.src;
+    if(!src){try{const r=await fetch("https://en.wikipedia.org/api/rest_v1/page/summary/"+t);if(r.ok){const j=await r.json();src=(j.thumbnail||{}).source||null;if(src)store.set(key,{src});}}catch(e){}}
+    if(!src)return;const img=fig.querySelector("img");img.onload=()=>{fig.hidden=false;};img.src=src.replace(/\/\d+px-/,"/640px-");
+  });
+}
+// ===== Safari World show board (weekend schedule) =====
+function showsHTML(){
+  const rows=[["10:15","🦧 紅毛猩猩秀","最好笑，會『打拳擊』",1],["10:15","🦜 鳥秀",""],["11:00","🐘 大象秀","大象畫畫、踢足球",1],["11:00","🦭 海獅秀","適合小朋友"],["11:45","💥 Spy War 特技秀","水上摩托車、爆破，坐後面才不會被噴濕"],
+    ["12:30","🦒 長頸鹿餵食台","午餐後去，可以親手餵",1],["13:45","🐬 海豚秀","最受歡迎，提早 15 分鐘入座",1],["14:30","🦭 海獅秀",""],["15:30","🦧 紅毛猩猩秀（第 2 場）","早上錯過可以看這場"],["15:30","🤠 牛仔特技秀",""],["16:15","🐬 海豚秀（第 2 場）",""],["16:15","🦜 鳥秀",""]];
+  return `<div class="box shows"><h3>🎪 Safari World 今天表演（週末場）</h3>
+   <table>${rows.map(r=>`<tr><td>${r[0]}</td><td><span class="${r[3]?"star":""}">${r[1]}${r[3]?" ⭐":""}</span>${r[2]?`<br><span style="color:var(--muted);font-size:.78rem">${r[2]}</span>`:""}</td></tr>`).join("")}</table>
+   <ul><li>⭐ 是動物明星，必看：<b>紅毛猩猩、大象、海豚、長頸鹿餵食</b></li>
+   <li>早上先開車逛 Safari Park（約 45 分鐘），再去 Marine Park 看秀</li>
+   <li>園區到 17:00～17:30，表演時間偶爾會微調，以入口看板為準</li>
+   <li>跟 KKday 的話，集合時間比表演重要，別看到忘記時間</li></ul></div>`;
+}
 function metroHTML(){
   const st=(c,n)=>`<span class="st">${c}</span>${n}`;
   return `<div class="box metro"><h3>🚝 Day 2 捷運小抄（BTS 淺綠線）</h3>
