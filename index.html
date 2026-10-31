@@ -305,7 +305,7 @@ const DAYS=[
    {t:"17:35",ttl:"抵達 BKK",k:"fly",p:"airport"},
    {t:"18:00",ttl:"入境、領行李",k:"go"},
    {t:"19:00",ttl:"搭車到彩鴻酒店、入住放行李",note:"曼谷素坤逸 11 巷彩鴻酒店（Travelodge Sukhumvit 11），四晚都住這",k:"go",p:"hotel",s:"tbd"},
-   {t:"20:00",ttl:"BTS 到 JOHNNY MARKET",note:"Nana（E3）→ Ekkamai（E7）坐 4 站約 10 分鐘，2 號出口",k:"go",p:"johnny",q:"Johnny Market Ekkamai"},
+   {t:"20:00",ttl:"BTS 到 JOHNNY MARKET",note:"Nana 3 號出口上樓 → Ekkamai（E7）坐 4 站約 10 分鐘 → Ekkamai 2 號出口，巴士總站前面",k:"go",p:"johnny",q:"Johnny Market Ekkamai"},
    {t:"20:30",ttl:"JOHNNY MARKET 晚餐、逛攤",note:"必吃：Jeh O 冬蔭功泡麵、Sawang 蟹鉗麵、Ko Ong 海南雞飯。營業到 01:00，有屋頂不怕雨",k:"eat",p:"johnny",q:"Johnny Market Ekkamai"},
    {t:"22:00",ttl:"GOLDEN HOUR BKK",note:"坐下休息、飲料或點心",k:"eat",p:"golden",q:"GOLDEN HOUR BKK"},
    {t:"23:00",ttl:"回彩鴻酒店",k:"go",p:"hotel"},
@@ -689,10 +689,10 @@ function metroHTML(){
   return `<div class="box metro"><h3>🚝 Day 2 捷運小抄（BTS 淺綠線）</h3>
    <div class="leg"><span>11:00</span><span>早午餐後 → ${st("N8","Mo Chit")}</span><small>🚪 <b>1 號出口</b>，走約 3 分鐘到市集南邊入口，跟人潮走就到</small></div>
    <div class="leg"><span>13:00</span><span>${st("N8","Mo Chit")} → ${st("N3","Victory Monument")}</span><small>往市區方向坐 4 站。🚪 <b>3 或 4 號出口</b>，走約 5 分鐘到船麵巷（Boat Noodle Alley），在運河旁</small></div>
-   <div class="leg"><span>14:00</span><span>${st("N3","Victory")} → ${st("E1","Chit Lom")}</span><small>坐 4 站，Siam 站不用下車。🚪 出站<b>不要下樓</b>，留在天橋（Skywalk）上，<b>往 Siam 方向</b>走，跟「CentralWorld」指示牌，約 5 分鐘</small></div>
-   <div class="leg"><span>20:30</span><span>${st("E1","Chit Lom")} → ${st("E3","Nana")}</span><small>坐 2 站。BHAWA 在 Soi 8（雙號巷，在大路南側），下樓後過到南側，開 Google 地圖走約 5 分鐘；或直接 Grab</small></div>
-   <div class="leg"><span>22:30</span><span>回飯店</span><small>從 Soi 8 走回素坤逸大路，過馬路到北側（單號巷），<b>往 Asok 方向</b>走，過 Soi 9 下一條巷子就是 Soi 11，<b>左轉</b>進巷子。約 10 分鐘</small></div>
-   <div class="leg"><span>出門</span><span>彩鴻酒店 → ${st("E3","Nana")}</span><small>走出 Soi 11 到素坤逸大路，<b>右轉</b>往 Nana 方向（Asok 的反方向），過 Soi 9 就看到車站樓梯，約 10 分鐘</small></div>
+   <div class="leg"><span>14:00</span><span>${st("N3","Victory")} → ${st("E1","Chit Lom")}</span><small>坐 4 站，Siam 站不用下車。🚪 出閘門<b>不用找出口、不要下樓</b>，直接走天橋（Ratchaprasong Skywalk）<b>往 Siam 方向</b>，跟「CentralWorld」指示牌，約 5 分鐘</small></div>
+   <div class="leg"><span>20:30</span><span>${st("E1","Chit Lom")} → ${st("E3","Nana")}</span><small>坐 2 站。🚪 <b>Nana 4 號出口</b>（Soi 8 這一側），下樓進 Soi 8，走約 5 分鐘</small></div>
+   <div class="leg"><span>22:30</span><span>回飯店</span><small>從 Soi 8 走回大路。最簡單：從 <b>4 號出口</b>上天橋過馬路，從 <b>3 號出口</b>下樓，就在 Soi 11 巷口，<b>左轉</b>進巷子。約 10 分鐘</small></div>
+   <div class="leg"><span>出門</span><span>彩鴻酒店 → ${st("E3","Nana")}</span><small>走出 Soi 11 到素坤逸大路，<b>右轉</b>，從 <b>Nana 3 號出口</b>（巷口 Ramada 飯店旁）上樓，約 5–10 分鐘</small></div>
    <ul><li>出口號碼來自網路資料，出站前先看<b>站內地圖和指示牌</b>確認</li><li><b>買一日票 ฿150</b>：人工窗口說「One Day Pass」，當天無限搭 BTS。單程每趟 ฿17–62，搭 4 趟以上就划算</li>
    <li>BTS <b>不能刷信用卡</b>進站，只收現金買票或一日票</li>
    <li>MRT（藍線）才可以直接刷感應信用卡；今天用不到</li>

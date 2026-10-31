@@ -1,5 +1,5 @@
 // Simple offline cache: page first from network, fall back to cache when offline.
-const CACHE = "bkk-v7";
+const CACHE = "bkk-v8";
 const CORE = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
