@@ -148,6 +148,9 @@ header h1 span{background:linear-gradient(transparent 60%,var(--gold-soft) 60%);
 .shows td:first-child{font-family:var(--f-num);white-space:nowrap;width:4.5em}
 .shows .star{font-weight:700}
 .shows ul{margin:8px 0 0;padding-left:18px;font-size:.8rem;display:grid;gap:2px}
+.wxi{font-size:.7rem;border:1.5px solid var(--ink);border-radius:999px;padding:0 7px;background:var(--sky-soft);font-family:var(--f-num);white-space:nowrap}
+.wxi:empty{display:none}
+.wxi.rain{background:#dceeff;border-color:#3d8fd1}
 .nextstop{margin-top:8px;background:var(--mint-soft);border:2px dashed var(--ink);border-radius:12px;padding:3px 10px;font-size:.82rem}
 .nextstop b{font-family:var(--f-num)}
 .ctrl{display:flex;align-items:center;gap:10px;margin-top:10px}
@@ -581,7 +584,7 @@ function render(id,keepTime){
    ${editor()}
    <div class="box tl"><ol>${(()=>{const seenP={};day.items.forEach((it,ix)=>{if(it.p&&it.k!=="fly"&&it.p!=="khh"&&!seenP[it.p]&&(it.k!=="go"||it.p==="hotel"))seenP[it.p]=ix+1;});day._pic=seenP;return "";})()}${day.items.map((it,ix)=>`<li class="it"><div class="t">${esc(it.t)}${it.tw?"<small>台灣時間</small>":""}</div><div class="b">
       <div class="ttl">${it.p&&it.k!=="fly"&&it.p!=="khh"?`<a class="ttl-a" href="${navURL(destOf(it.p,it.q))}" target="_blank" rel="noopener">${esc(it.ttl)} <span aria-hidden="true">📍</span></a>`:esc(it.ttl)}</div>${it.note?`<div class="note">${esc(it.note)}</div>`:""}
-      <div class="tags"><span class="tg k-${it.k}">${KIND[it.k]}</span>${it.s?`<span class="tg ${it.s}">${it.s==="ok"?"已訂":"待確認"}</span>`:""}${durTag(day,ix)}${it.p&&it.k!=="fly"&&it.p!=="khh"?`<a class="gm nav" href="${navURL(destOf(it.p,it.q))}" target="_blank" rel="noopener">🧭 路線・時間</a>`:""}${it.p&&(TH[it.p]||it.p==="hotel")&&it.k!=="fly"?`<button type="button" class="drv" data-th="${it.p}">🚕 給司機看</button>`:""}</div>${warnFor(day,it)}${day._pic[it.p]===ix+1?picHTML(it.p,it.q):""}</div></li>`).join("")}</ol></div>
+      <div class="tags"><span class="tg k-${it.k}">${KIND[it.k]}</span>${wxSlot(day,it)}${it.s?`<span class="tg ${it.s}">${it.s==="ok"?"已訂":"待確認"}</span>`:""}${durTag(day,ix)}${it.p&&it.k!=="fly"&&it.p!=="khh"?`<a class="gm nav" href="${navURL(destOf(it.p,it.q))}" target="_blank" rel="noopener">🧭 路線・時間</a>`:""}${it.p&&(TH[it.p]||it.p==="hotel")&&it.k!=="fly"?`<button type="button" class="drv" data-th="${it.p}">🚕 給司機看</button>`:""}</div>${warnFor(day,it)}${day._pic[it.p]===ix+1?picHTML(it.p,it.q):""}</div></li>`).join("")}</ol></div>
    <div class="notes"><div class="box note-card"><h3>🚕 交通</h3><p>${esc(day.go)}</p></div>
      <div class="box note-card tbd"><h3>⏳ 待確認</h3><p>${esc(day.tbd)}</p></div>
      <div class="box note-card"><h3>🔁 備選</h3><p>${esc(day.alt)}</p></div></div>${day.metro?metroHTML():""}${day.id==="d3"?showsHTML():""}${day.flood?floodHTML():""}`;
@@ -589,7 +592,7 @@ function render(id,keepTime){
   $("#playBtn").onclick=()=>setPlay(!st.play);
   $("#spdBtn").onclick=e=>{st.speed=st.speed===1?2:st.speed===2?4:st.speed===4?8:1;e.target.textContent="×"+st.speed;};
   $("#liveBtn").onclick=()=>{if(st.live){st.live=false;$("#liveBtn").setAttribute("aria-pressed","false");}else goLive();};
-  bindCrew();fillWx();loadPics();
+  bindCrew();fillWx();loadPics();loadSpotWx();
   const today=thDate()===day.date.replace(/^0/,"");
   if(keepTime) setTime(st.m);
   else if(today) goLive();
@@ -599,6 +602,31 @@ function render(id,keepTime){
 // ===== weather (Open-Meteo, free, no key) =====
 const WX_URL="https://api.open-meteo.com/v1/forecast?latitude=13.75&longitude=100.52&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max&timezone=Asia%2FBangkok&start_date=2026-10-30&end_date=2026-11-03";
 let WX=null,WXAT=0,WXLOAD=true;
+// ===== weather per spot, at the hour of each stop (Open-Meteo hourly) =====
+const PC={airport:[13.690,100.750],hotel:[13.743,100.555],johnny:[13.720,100.585],golden:[13.742,100.556],breakfast:[13.738,100.561],
+  chatuchak:[13.800,100.551],victory:[13.765,100.538],central:[13.746,100.539],bhawa:[13.741,100.554],safari:[13.866,100.704],
+  somsak:[13.727,100.507],wwg:[13.729,100.588],dam:[13.519,99.959],mk:[13.408,100.000],market:[13.519,99.959],bigc:[13.723,100.585],
+  infinity:[13.732,100.563],frans:[13.733,100.574],s24:[13.724,100.567]};
+function spotKey(it){if(!it.p||it.k==="fly"||it.k==="go"||it.p==="khh")return null;if(it.fl)return it.fl;return PC[it.p]?it.p:null;}
+function wxSlot(day,it){const k=spotKey(it);if(!k)return"";const h=Math.min(23,Math.floor(it.m/60));
+  return `<span class="wxi" data-k="${k}" data-d="${day.date}" data-h="${h}"></span>`;}
+let SPOT=null;
+async function loadSpotWx(){
+  const els=document.querySelectorAll(".wxi");if(!els.length)return;
+  if(!SPOT){const c=store.get("bkk-spotwx");if(c&&Date.now()-c.at<3600e3)SPOT=c.d;}
+  if(!SPOT){
+    const keys=Object.keys(PC);
+    const url="https://api.open-meteo.com/v1/forecast?latitude="+keys.map(k=>PC[k][0]).join(",")+"&longitude="+keys.map(k=>PC[k][1]).join(",")+
+      "&hourly=temperature_2m,precipitation_probability,weather_code&timezone=Asia%2FBangkok&start_date=2026-10-30&end_date=2026-11-03";
+    try{const r=await fetch(url);if(!r.ok)return;let j=await r.json();if(!Array.isArray(j))j=[j];
+      const d={};keys.forEach((k,i)=>{const h=j[i].hourly;d[k]={t:h.time,T:h.temperature_2m,P:h.precipitation_probability,C:h.weather_code};});
+      SPOT=d;store.set("bkk-spotwx",{at:Date.now(),d});}catch(e){return;}
+  }
+  els.forEach(el=>{const s=SPOT[el.dataset.k];if(!s)return;const[m,dd]=el.dataset.d.split("/");
+    const iso=`2026-${String(m).padStart(2,"0")}-${String(dd).padStart(2,"0")}T${String(el.dataset.h).padStart(2,"0")}:00`;
+    const i=s.t.indexOf(iso);if(i<0||s.T[i]==null)return;const[ic]=wxName(s.C[i]);const pp=s.P[i];
+    el.textContent=`${ic} ${Math.round(s.T[i])}°${pp!=null?" ☔"+pp+"%":""}`;el.classList.toggle("rain",pp>=50);el.title="這個時間在這裡的天氣預報";});
+}
 const wxName=c=>c===0?["☀️","晴"]:c<=2?["🌤️","晴時多雲"]:c===3?["☁️","陰天"]:c<=48?["🌫️","霧"]:c<=57?["🌦️","毛毛雨"]:c<=67?["🌧️","下雨"]:c<=82?["🌦️","陣雨"]:["⛈️","雷雨"];
 async function loadWx(){
   const c=store.get("bkk-wx");
